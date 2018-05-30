@@ -1,6 +1,5 @@
-
 {
-  "name": "react-native-vdocipher-rn-bridge",
+  "name": "vdocipher-rn-bridge",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
