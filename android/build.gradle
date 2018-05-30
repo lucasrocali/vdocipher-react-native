@@ -28,9 +28,14 @@ android {
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://github.com/VdoCipher/maven-repo/raw/master/repo"
+    }
+    jcenter()
 }
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
+    compile 'com.vdocipher.aegis:vdocipher-android:1.0.0-alpha9'
 }
   
