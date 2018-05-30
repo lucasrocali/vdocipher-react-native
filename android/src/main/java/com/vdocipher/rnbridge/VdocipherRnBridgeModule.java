@@ -1,4 +1,3 @@
-
 package com.vdocipher.rnbridge;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -18,5 +17,10 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "VdocipherRnBridge";
+  }
+
+  @ReactMethod
+  public void hello() {
+    android.widget.Toast.makeText(getReactApplicationContext(), "Hello", android.widget.Toast.LENGTH_SHORT).show();
   }
 }
