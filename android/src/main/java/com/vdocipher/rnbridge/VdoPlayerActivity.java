@@ -205,6 +205,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
         @Override
         public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
             log("onLoaded");
+            player.setPlayWhenReady(true);
         }
 
         @Override
