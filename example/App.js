@@ -24,11 +24,12 @@ export default class App extends Component<Props> {
   componentWillMount() {
     fetch("https://dev.vdocipher.com/api/site/homepage_video")
       .then(res => res.json())
-      .then(resp => this.setState({otp: resp.otp, pi: resp.playbackInfo}));
+      .then(resp => this.setState({otp: resp.otp, playbackInfo: resp.playbackInfo}));
   }
 
   render() {
     var ready = this.state.otp != null;
+    const { otp, playbackInfo } = this.state;
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -37,7 +38,7 @@ export default class App extends Component<Props> {
         <Button
           disabled={!ready}
           title={ready ? "Start video" : "Loading..."}
-          onPress={() => { startVideoScreen(this.state.otp, this.state.pi); }}
+          onPress={() => { startVideoScreen(JSON.stringify({embedInfo: {otp, playbackInfo}})); }}
         />
       </View>
     );
