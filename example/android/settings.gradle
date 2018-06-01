@@ -1,3 +1,5 @@
 rootProject.name = 'example'
+include ':vdocipher-rn-bridge'
+project(':vdocipher-rn-bridge').projectDir = new File(rootProject.projectDir, '../node_modules/vdocipher-rn-bridge/android')
 
 include ':app'
