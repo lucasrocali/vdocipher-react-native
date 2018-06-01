@@ -3,6 +3,17 @@
 
 React native library for integrating vdocipher android sdk into your react native app.
 
+## Try
+
+To run the example react native app included in this repo, clone this repo to your
+development machine, and run the example app:
+
+`$ mkdir vdocipher-react-native && cd vdocipher-react-native`
+
+`$ git clone https://github.com/VdoCipher/vdocipher-react-native.git .`
+
+`$ npm install && cd example && npm install && npm run android`
+
 ## Getting started
 
 `$ npm install vdocipher-rn-bridge --save`
