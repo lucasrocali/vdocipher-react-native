@@ -20,5 +20,10 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
+        // todo this repo definition should not be here; it is declared in the dependency module
+        // but for some reason gradle cannot resolve dependencies using the repositories there
+        maven {
+            url "https://github.com/VdoCipher/maven-repo/raw/master/repo"
+        }
     }
 }
