@@ -1,9 +1,13 @@
 
 # vdocipher-rn-bridge
 
+React native library for integrating vdocipher android sdk into your react native app.
+
 ## Getting started
 
 `$ npm install vdocipher-rn-bridge --save`
+
+For installation you can choose either automatic or manual installation:
 
 ### Mostly automatic installation
 
@@ -37,8 +41,7 @@
 
 ## Usage
 ```javascript
-import VdocipherRnBridge from 'vdocipher-rn-bridge';
+import { startVideoScreen } from 'vdocipher-rn-bridge';
 
-// TODO: What to do with the module?
-VdocipherRnBridge;
+startVideoScreen({embedInfo: {otp: 'some-otp', playbackInfo: 'some-playbackInfo'}});
 ```
