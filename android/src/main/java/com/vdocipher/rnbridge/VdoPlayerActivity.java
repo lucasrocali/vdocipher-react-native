@@ -173,7 +173,6 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
         @Override
         public void onTracksChanged(Track[] tracks, Track[] tracks1) {
-            Log.i(TAG, "onTracksChanged");
             log("onTracksChanged");
         }
 
@@ -181,22 +180,18 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
         public void onBufferUpdate(long bufferTime) {}
 
         @Override
-        public void onSeekTo(long millis) {
-            Log.i(TAG, "onSeekTo: " + String.valueOf(millis));
-        }
+        public void onSeekTo(long millis) {}
 
         @Override
         public void onProgress(long millis) {}
 
         @Override
         public void onPlaybackSpeedChanged(float speed) {
-            Log.i(TAG, "onPlaybackSpeedChanged " + speed);
             log("onPlaybackSpeedChanged " + speed);
         }
 
         @Override
         public void onLoading(VdoPlayer.VdoInitParams vdoInitParams) {
-            Log.i(TAG, "onLoading");
             log("onLoading");
         }
 
@@ -209,7 +204,6 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
         @Override
         public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
-            Log.i(TAG, "onLoaded");
             log("onLoaded");
         }
 
@@ -222,7 +216,6 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
         @Override
         public void onMediaEnded(VdoPlayer.VdoInitParams vdoInitParams) {
-            Log.i(TAG, "onMediaEnded");
             log("onMediaEnded");
         }
     };
