@@ -4,6 +4,7 @@
 
     <application>
         <activity android:name=".VdoPlayerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>
 </manifest>
