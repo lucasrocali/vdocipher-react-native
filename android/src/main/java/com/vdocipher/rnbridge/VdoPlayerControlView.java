@@ -201,6 +201,7 @@ public class VdoPlayerControlView extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         isAttachedToWindow = true;
+        updateAll();
     }
 
     @Override
@@ -230,6 +231,7 @@ public class VdoPlayerControlView extends FrameLayout {
     private void updateAll() {
         updatePlayPauseButtons();
         updateSpeedControlButton();
+        updateFullscreenButtons();
     }
 
     private void updatePlayPauseButtons() {
