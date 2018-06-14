@@ -70,10 +70,11 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
         playerFragment = (VdoPlayerFragment)getFragmentManager().findFragmentById(R.id.online_vdo_player_fragment);
         playerControlView = (VdoPlayerControlView)findViewById(R.id.player_control_view);
-        showControls(false);
 
         currentOrientation = getResources().getConfiguration().orientation;
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        setLayout(currentOrientation == Configuration.ORIENTATION_LANDSCAPE);
+
+        playerControlView.setFullscreenState(currentOrientation == Configuration.ORIENTATION_LANDSCAPE);
 
         initializePlayer();
     }
@@ -253,32 +254,38 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
         if (newOrientation == oldOrientation) {
             Log.i(TAG, "orientation unchanged");
         } else if (newOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setLayout(true);
+            // hide system windows
+            showSystemUi(false);
+            showControls(false);
+        } else {
+            setLayout(false);
+            // show system windows
+            showSystemUi(true);
+        }
+    }
+
+    private void setLayout(boolean landscape) {
+        if (landscape) {
             // hide other views
             (findViewById(R.id.online_vdo_player_fragment)).setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
             playerControlView.setFitsSystemWindows(true);
-            // hide system windows
-            showSystemUi(false);
-            showControls(false);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         } else {
             // show other views
             (findViewById(R.id.online_vdo_player_fragment)).setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             playerControlView.setFitsSystemWindows(false);
             playerControlView.setPadding(0,0,0,0);
-            // show system windows
-            showSystemUi(true);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            showFullScreen(false);
-            playerControlView.setFullscreenState(false);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     private void showFullScreen(boolean show) {

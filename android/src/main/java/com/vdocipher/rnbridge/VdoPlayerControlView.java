@@ -201,6 +201,7 @@ public class VdoPlayerControlView extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         isAttachedToWindow = true;
+        updateAll();
     }
 
     @Override
@@ -230,6 +231,7 @@ public class VdoPlayerControlView extends FrameLayout {
     private void updateAll() {
         updatePlayPauseButtons();
         updateSpeedControlButton();
+        updateFullscreenButtons();
     }
 
     private void updatePlayPauseButtons() {
@@ -237,7 +239,7 @@ public class VdoPlayerControlView extends FrameLayout {
             return;
         }
 
-        int playbackState = player.getPlaybackState();
+        int playbackState = player != null ? player.getPlaybackState() : -1;
         boolean playing = player != null
                 && playbackState != VdoPlayer.STATE_IDLE && playbackState != VdoPlayer.STATE_ENDED
                 && player.getPlayWhenReady();
