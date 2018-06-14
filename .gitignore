@@ -46,3 +46,7 @@ buck-out/
 
 *.swp
 
+# Bundle artifact
+*.jsbundle
+*.bundle
+*.bundle.meta
