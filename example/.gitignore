@@ -54,3 +54,7 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+# Android js bundle
+**/assets/index.android.bundle
+**/assets/index.android.bundle.meta
