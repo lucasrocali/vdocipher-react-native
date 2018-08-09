@@ -21,7 +21,7 @@ export default class App extends Component<Props> {
     this.state = {};
   }
 
-  componentWillMount() {
+  componentDidMount() {
     fetch("https://dev.vdocipher.com/api/site/homepage_video")
       .then(res => res.json())
       .then(resp => this.setState({otp: resp.otp, playbackInfo: resp.playbackInfo}));
