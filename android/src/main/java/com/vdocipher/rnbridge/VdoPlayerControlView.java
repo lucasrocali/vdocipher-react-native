@@ -248,13 +248,13 @@ public class VdoPlayerControlView extends FrameLayout {
     }
 
     private void rewind() {
-        if (rewindMs > 0) {
+        if (rewindMs > 0 && player != null) {
             player.seekTo(Math.max(0, player.getCurrentTime() - rewindMs));
         }
     }
 
     private void fastForward() {
-        if (ffwdMs > 0) {
+        if (ffwdMs > 0 && player != null) {
             player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + ffwdMs));
         }
     }
@@ -429,7 +429,7 @@ public class VdoPlayerControlView extends FrameLayout {
         public void onStopTrackingTouch(SeekBar seekBar) {
             scrubbing = false;
             int seekTarget = seekBar.getProgress();
-            player.seekTo(seekTarget);
+            if (player != null) player.seekTo(seekTarget);
             hideAfterTimeout();
         }
 
