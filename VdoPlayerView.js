@@ -14,13 +14,13 @@ export default class VdoPlayerView extends Component {
 
   _onInitSuccess(event: Event) {
     if (this.props.onInitializationSuccess) {
-      console.log('success');
+      this.props.onInitializationSuccess();
     }
   }
 
   _onInitFailure(event: Event) {
     if (this.props.onInitializationFailure) {
-      console.log('failure');
+      this.props.onInitializationFailure();
     }
   }
 
