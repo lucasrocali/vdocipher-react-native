@@ -12,10 +12,12 @@ import {
   Button,
   View
 } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 import { startVideoScreen } from 'vdocipher-rn-bridge';
+import NativeControlsScreen from './NativeControlsScreen';
 
 type Props = {};
-export default class App extends Component<Props> {
+class HomeScreen extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {};
@@ -37,18 +39,38 @@ export default class App extends Component<Props> {
         </Text>
         <Button
           disabled={!ready}
-          title={ready ? "Start video" : "Loading..."}
+          title={ready ? "Start video in native fullscreen" : "Loading..."}
           onPress={() => { startVideoScreen(JSON.stringify({embedInfo: {otp, playbackInfo}})); }}
+        />
+        <Button
+          disabled={!ready}
+          title={ready ? "Start video with embedded native controls" : "Loading..."}
+          onPress={() => this.props.navigation.navigate('NativeControls')}
         />
       </View>
     );
   }
 }
 
+export default createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen
+    },
+    NativeControls: {
+      screen: NativeControlsScreen
+    },
+  },
+  {
+     initialRouteName: 'Home',
+     headerMode: 'none',
+  }
+);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
