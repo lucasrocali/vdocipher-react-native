@@ -4,6 +4,7 @@ import {
   Text,
   View
 } from 'react-native';
+import { VdoPlayerView } from 'vdocipher-rn-bridge';
 
 export default class NativeControlsScreen extends Component {
   constructor(props) {
@@ -22,9 +23,10 @@ export default class NativeControlsScreen extends Component {
     const { otp, playbackInfo } = this.state;
     return (
       <View style={styles.container}>
-        <View style={{backgroundColor:'green', justifyContent:'center', alignItems: 'center', width: '100%', height:200}}>
-          <Text>Placeholder for Video component</Text>
-        </View>
+        <VdoPlayerView style={styles.player}
+          onInitializationSuccess={() => console.log('init success')}
+          onInitializationFailure={() => console.log('init failure')}
+        />
         <Text style={styles.description}>
           The ui controls for the player are embedded inside the native view
         </Text>
