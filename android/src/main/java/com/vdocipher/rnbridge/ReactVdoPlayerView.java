@@ -10,6 +10,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.player.VdoPlayer;
+import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 import com.vdocipher.aegis.player.VdoPlayerView;
 
 public class ReactVdoPlayerView extends FrameLayout implements VdoPlayer.InitializationListener {
@@ -17,6 +18,10 @@ public class ReactVdoPlayerView extends FrameLayout implements VdoPlayer.Initial
 
     private final VdoPlayerView playerView;
     private final VdoPlayerControlView playerControlView;
+
+    private VdoPlayer vdoPlayer;
+
+    private VdoInitParams pendingInitParams;
 
     public ReactVdoPlayerView(ThemedReactContext context) {
         super(context);
@@ -35,6 +40,8 @@ public class ReactVdoPlayerView extends FrameLayout implements VdoPlayer.Initial
     @Override
     public void onInitializationSuccess(VdoPlayer.PlayerHost playerHost, VdoPlayer vdoPlayer, boolean restored) {
         Log.d(TAG, "init success");
+        this.vdoPlayer = vdoPlayer;
+        playerControlView.setPlayer(vdoPlayer);
         WritableMap event = Arguments.createMap();
         event.putBoolean("restored", restored);
         ReactContext reactContext = (ReactContext)getContext();
@@ -42,6 +49,13 @@ public class ReactVdoPlayerView extends FrameLayout implements VdoPlayer.Initial
                 getId(),
                 "onInitSuccess",
                 event);
+
+        // load pending params
+        if (pendingInitParams != null) {
+            Log.d(TAG, "load pending params");
+            load(pendingInitParams);
+            pendingInitParams = null;
+        }
     }
 
     @Override
@@ -54,5 +68,13 @@ public class ReactVdoPlayerView extends FrameLayout implements VdoPlayer.Initial
                 getId(),
                 "onInitFailure",
                 event);
+    }
+
+    public void load(VdoInitParams params) {
+        if (vdoPlayer != null && params != null) {
+            vdoPlayer.load(params);
+        } else {
+            pendingInitParams = params;
+        }
     }
 }
