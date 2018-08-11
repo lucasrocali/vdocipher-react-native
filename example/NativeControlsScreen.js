@@ -9,21 +9,15 @@ import { VdoPlayerView } from 'vdocipher-rn-bridge';
 export default class NativeControlsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    fetch("https://dev.vdocipher.com/api/site/homepage_video")
-      .then(res => res.json())
-      .then(resp => this.setState({otp: resp.otp, playbackInfo: resp.playbackInfo}));
   }
 
   render() {
-    var ready = this.state.otp != null;
-    const { otp, playbackInfo } = this.state;
+    const embedInfo = this.props.navigation.getParam('embedInfo');
+
     return (
       <View style={styles.container}>
         <VdoPlayerView style={styles.player}
+          embedInfo={embedInfo}
           onInitializationSuccess={() => console.log('init success')}
           onInitializationFailure={() => console.log('init failure')}
         />

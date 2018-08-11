@@ -45,7 +45,7 @@ class HomeScreen extends Component<Props> {
         <Button
           disabled={!ready}
           title={ready ? "Start video with embedded native controls" : "Loading..."}
-          onPress={() => this.props.navigation.navigate('NativeControls')}
+          onPress={() => this.props.navigation.navigate('NativeControls', {embedInfo: {otp, playbackInfo}})}
         />
       </View>
     );
