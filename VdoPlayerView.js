@@ -41,8 +41,19 @@ VdoPlayerView.propTypes = {
   onInitFailure: PropTypes.func,
 
   /* Wrapper component public api */
+  embedInfo: PropTypes.object,
   onInitializationSuccess: PropTypes.func,
   onInitializationFailure: PropTypes.func,
+  onLoading: PropTypes.func,
+  onLoaded: PropTypes.func,
+  onLoadError: PropTypes.func,
+  onPlayerStateChanged: PropTypes.func,
+  onProgress: PropTypes.func,
+  onBufferUpdate: PropTypes.func,
+  onPlaybackSpeedChanged: PropTypes.func,
+  onTracksChanged: PropTypes.func,
+  onMediaEnded: PropTypes.func,
+  onError: PropTypes.func,
 
   /* Required */
   ...ViewPropTypes,
