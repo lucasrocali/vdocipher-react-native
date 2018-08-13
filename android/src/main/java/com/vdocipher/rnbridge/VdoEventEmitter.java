@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.vdocipher.aegis.media.ErrorDescription;
@@ -59,7 +60,13 @@ class VdoEventEmitter {
     private static final String EVENT_PROP_MEDIA_INFO_DESCRIPTION = "description";
     private static final String EVENT_PROP_MEDIA_INFO_DURATION = "duration";
 
-    private static final String EVENT_PROP_DURATION = "duration";
+    private static final String EVENT_PROP_TRACK_ID = "id";
+    private static final String EVENT_PROP_TRACK_TYPE = "type";
+    private static final String EVENT_PROP_TRACK_LANGUAGE = "language";
+    private static final String EVENT_PROP_TRACK_BITRATE = "bitrate";
+    private static final String EVENT_PROP_TRACK_WIDTH = "width";
+    private static final String EVENT_PROP_TRACK_HEIGHT = "height";
+
     private static final String EVENT_PROP_CURRENT_TIME = "currentTime";
     private static final String EVENT_PROP_BUFFER_TIME = "bufferTime";
     private static final String EVENT_PROP_SEEK_TIME = "seekTime";
@@ -126,13 +133,9 @@ class VdoEventEmitter {
     }
 
     void playerStateChanged(boolean playWhenReady, int playerState) {
-        final String state = playerState == VdoPlayer.STATE_IDLE ? "idle" :
-                playerState == VdoPlayer.STATE_BUFFERING ? "buffering" :
-                        playerState == VdoPlayer.STATE_READY ? "ready" : "ended";
-
         WritableMap event = Arguments.createMap();
         event.putBoolean(EVENT_PROP_PLAY_WHEN_READY, playWhenReady);
-        event.putString(EVENT_PROP_PLAYER_STATE, state);
+        event.putString(EVENT_PROP_PLAYER_STATE, stateName(playerState));
         receiveEvent(EVENT_PLAYER_STATE_CHANGED, event);
     }
 
@@ -157,7 +160,13 @@ class VdoEventEmitter {
     }
 
     void tracksChanged(Track[] availableTracks, Track[] selectedTracks) {
-        receiveEvent(EVENT_TRACKS_CHANGED, null);
+        WritableArray available = makeTrackMapArray(availableTracks);
+        WritableArray selected = makeTrackMapArray(selectedTracks);
+
+        WritableMap event = Arguments.createMap();
+        event.putArray(EVENT_PROP_AVAILABLE_TRACKS, available);
+        event.putArray(EVENT_PROP_SELECTED_TRACKS, selected);
+        receiveEvent(EVENT_TRACKS_CHANGED, event);
     }
 
     void mediaEnded(VdoInitParams vdoInitParams) {
@@ -178,6 +187,53 @@ class VdoEventEmitter {
         errDes.putString(EVENT_PROP_ERROR_MSG, errorDescription.errorMsg);
         errDes.putInt(EVENT_PROP_ERROR_HTTP_CODE, errorDescription.httpStatusCode);
         return errDes;
+    }
+
+    private static WritableArray makeTrackMapArray(Track[] tracks) {
+        WritableArray trackArray = Arguments.createArray();
+        for (Track track: tracks) {
+            trackArray.pushMap(makeTrackMap(track));
+        }
+        return trackArray;
+    }
+
+    private static WritableMap makeTrackMap(Track track) {
+        WritableMap errDes = Arguments.createMap();
+        errDes.putInt(EVENT_PROP_TRACK_ID, track.id);
+        errDes.putString(EVENT_PROP_TRACK_TYPE, trackType(track.type));
+        errDes.putString(EVENT_PROP_TRACK_LANGUAGE, track.language);
+        errDes.putInt(EVENT_PROP_TRACK_BITRATE, track.bitrate);
+        errDes.putInt(EVENT_PROP_TRACK_WIDTH, track.width);
+        errDes.putInt(EVENT_PROP_TRACK_HEIGHT, track.height);
+        return errDes;
+    }
+
+    private static String trackType(int type) {
+        switch (type) {
+            case Track.TYPE_AUDIO:
+                return "audio";
+            case Track.TYPE_VIDEO:
+                return "video";
+            case Track.TYPE_CAPTIONS:
+                return "captions";
+            case Track.TYPE_COMBINED:
+                return "combined";
+            default:
+                return "unknown";
+        }
+    }
+
+    private static String stateName(int playerState) {
+        switch (playerState) {
+            case VdoPlayer.STATE_IDLE:
+                return "idle";
+            case VdoPlayer.STATE_BUFFERING:
+                return "buffering";
+            case VdoPlayer.STATE_READY:
+                return "ready";
+            default:
+                return "ended";
+        }
     }
 
     private void receiveEvent(@VdoEvent String type, WritableMap event) {
