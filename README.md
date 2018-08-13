@@ -1,6 +1,18 @@
 
 # vdocipher-rn-bridge
 
+
+## Note:
+
+1. This is a _work in progress_. Please contact us at info@vdocipher.com  before
+   using it in your application
+2. IOS is not supported. Only Android support available. IOS support will be
+   added in future.
+3. Currently, it is not possible to get any events or callbacks from Android
+   player activity. The video will open in a new _native_ activity outside of
+   the react native setup. Back button will take the user from the player
+   activity to home activity.
+
 React native library for integrating vdocipher android sdk into your react native app.
 
 ## Try
