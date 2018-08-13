@@ -40,7 +40,7 @@ class HomeScreen extends Component<Props> {
         <Button
           disabled={!ready}
           title={ready ? "Start video in native fullscreen" : "Loading..."}
-          onPress={() => { startVideoScreen(JSON.stringify({embedInfo: {otp, playbackInfo}})); }}
+          onPress={() => startVideoScreen({embedInfo: {otp, playbackInfo}})}
         />
         <Button
           disabled={!ready}
