@@ -23,6 +23,8 @@ public class VdocipherRnBridgePackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      return Collections.emptyList();
+      return Arrays.<ViewManager>asList(
+              new VdoPlayerViewManager()
+      );
     }
 }

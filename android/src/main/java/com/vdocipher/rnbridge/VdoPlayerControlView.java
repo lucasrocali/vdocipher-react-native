@@ -228,6 +228,27 @@ public class VdoPlayerControlView extends FrameLayout {
         }
     }
 
+    // todo Check if this workaround is still required when updating RN version.
+    // As described in https://github.com/facebook/react-native/issues/17968, native views
+    // first rendered as GONE can't transition to VISIBLE.
+    // workaround from https://github.com/facebook/react-native/issues/11829.
+    // needsCustomLayoutForChildren workaround does not resolve this issue
+    @Override
+    public void requestLayout() {
+        super.requestLayout();
+        post(measureAndLayout);
+    }
+
+    private final Runnable measureAndLayout = new Runnable() {
+        @Override
+        public void run() {
+            measure(
+                    MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+            layout(getLeft(), getTop(), getRight(), getBottom());
+        }
+    };
+
     private void updateAll() {
         updatePlayPauseButtons();
         updateSpeedControlButton();
@@ -248,13 +269,13 @@ public class VdoPlayerControlView extends FrameLayout {
     }
 
     private void rewind() {
-        if (rewindMs > 0) {
+        if (rewindMs > 0 && player != null) {
             player.seekTo(Math.max(0, player.getCurrentTime() - rewindMs));
         }
     }
 
     private void fastForward() {
-        if (ffwdMs > 0) {
+        if (ffwdMs > 0 && player != null) {
             player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + ffwdMs));
         }
     }
@@ -269,7 +290,7 @@ public class VdoPlayerControlView extends FrameLayout {
         }
 
         if (player != null && player.isSpeedControlSupported()) {
-            speedControlButton.setVisibility(View.VISIBLE);
+            speedControlButton.setVisibility(VISIBLE);
             float speed = player.getPlaybackSpeed();
             chosenSpeedIndex = Utils.getClosestFloatIndex(allowedSpeedList, speed);
             speedControlButton.setText(allowedSpeedStrList[chosenSpeedIndex]);
@@ -429,7 +450,7 @@ public class VdoPlayerControlView extends FrameLayout {
         public void onStopTrackingTouch(SeekBar seekBar) {
             scrubbing = false;
             int seekTarget = seekBar.getProgress();
-            player.seekTo(seekTarget);
+            if (player != null) player.seekTo(seekTarget);
             hideAfterTimeout();
         }
 
