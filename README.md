@@ -15,9 +15,9 @@
 
 React native library for integrating vdocipher android sdk into your react native app.
 
-## Try
+## Try the demo app
 
-To run the example react native app included in this repo, clone this repo to your
+To run the example react-native app included in this repo, clone this repo to your
 development machine, and run the example app:
 
 `$ mkdir vdocipher-react-native && cd vdocipher-react-native`
@@ -63,8 +63,26 @@ For installation you can choose either automatic or manual installation:
 
 
 ## Usage
+
+### Launch a video in a fullscreen player
+
 ```javascript
 import { startVideoScreen } from 'vdocipher-rn-bridge';
 
 startVideoScreen({embedInfo: {otp: 'some-otp', playbackInfo: 'some-playbackInfo'}});
+```
+
+### Embed a video in your react native layout
+
+```javascript
+import { VdoPlayerView } from 'vdocipher-rn-bridge';
+
+const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
+
+// in JSX
+
+<VdoPlayerView
+  style={{height: 200, width: '100%'}}
+  embedInfo={embedInfo}
+/>
 ```
