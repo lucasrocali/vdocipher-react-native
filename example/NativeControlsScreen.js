@@ -20,6 +20,10 @@ export default class NativeControlsScreen extends Component {
           embedInfo={embedInfo}
           onInitializationSuccess={() => console.log('init success')}
           onInitializationFailure={() => console.log('init failure')}
+          onLoading={(args) => console.log('loading')}
+          onLoaded={(args) => console.log('loaded')}
+          onTracksChanged={(args) => console.log('tracks changed')}
+          onMediaEnded={(args) => console.log('ended')}
         />
         <Text style={styles.description}>
           The ui controls for the player are embedded inside the native view
