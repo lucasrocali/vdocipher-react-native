@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class VdoPlayerViewManager extends SimpleViewManager<ReactVdoPlayerView> {
+public class VdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerView> {
     private static final String TAG = "VdoPlayerViewManager";
 
     private static final String REACT_CLASS = "RCTVdoPlayerView";
