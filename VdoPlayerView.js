@@ -8,19 +8,81 @@ import {requireNativeComponent, ViewPropTypes} from 'react-native';
 export default class VdoPlayerView extends Component {
   constructor(props) {
     super(props);
-    this._onInitSuccess = this._onInitSuccess.bind(this);
-    this._onInitFailure = this._onInitFailure.bind(this);
-  }
-
-  _onInitSuccess(event: Event) {
-    if (this.props.onInitializationSuccess) {
-      this.props.onInitializationSuccess();
+    this.state = {
+      fullscreen: true,
+      orientation: 'portrait',
     }
   }
 
-  _onInitFailure(event: Event) {
+  _onInitSuccess = (event) => {
+    if (this.props.onInitializationSuccess) {
+      this.props.onInitializationSuccess(event.nativeEvent);
+    }
+  }
+
+  _onInitFailure = (event) => {
     if (this.props.onInitializationFailure) {
-      this.props.onInitializationFailure();
+      this.props.onInitializationFailure(event.nativeEvent);
+    }
+  }
+
+  _onLoading = (event) => {
+    if (this.props.onLoading) {
+      this.props.onLoading();
+    }
+  }
+
+  _onLoaded = (event) => {
+    if (this.props.onLoaded) {
+      this.props.onLoaded();
+    }
+  }
+
+  _onLoadError = (event) => {
+    if (this.props.onLoadError) {
+      this.props.onLoadError(event.nativeEvent);
+    }
+  }
+
+  _onPlayerStateChanged = (event) => {
+    if (this.props.onPlayerStateChanged) {
+      this.props.onPlayerStateChanged(event.nativeEvent);
+    }
+  }
+
+  _onProgress = (event) => {
+    if (this.props.onProgress) {
+      this.props.onProgress(event.nativeEvent);
+    }
+  }
+
+  _onBufferUpdate = (event) => {
+    if (this.props.onBufferUpdate) {
+      this.props.onBufferUpdate(event.nativeEvent);
+    }
+  }
+
+  _onPlaybackSpeedChanged = (event) => {
+    if (this.props.onPlaybackSpeedChanged) {
+      this.props.onPlaybackSpeedChanged(event.nativeEvent);
+    }
+  }
+
+  _onTracksChanged = (event) => {
+    if (this.props.onTracksChanged) {
+      this.props.onTracksChanged(event.nativeEvent);
+    }
+  }
+
+  _onMediaEnded = (event) => {
+    if (this.props.onMediaEnded) {
+      this.props.onMediaEnded();
+    }
+  }
+
+  _onError = (event) => {
+    if (this.props.onError) {
+      this.props.onError(event.nativeEvent);
     }
   }
 
@@ -29,6 +91,16 @@ export default class VdoPlayerView extends Component {
       <RCTVdoPlayerView
         onInitSuccess={this._onInitSuccess}
         onInitFailure={this._onInitFailure}
+        onVdoLoading={this._onLoading}
+        onVdoLoaded={this._onLoaded}
+        onVdoLoadError={this._onLoadError}
+        onVdoPlayerStateChanged={this._onPlayerStateChanged}
+        onVdoProgress={this._onProgress}
+        onVdoBufferUpdate={this._onBufferUpdate}
+        onVdoPlaybackSpeedChanged={this._onPlaybackSpeedChanged}
+        onVdoTracksChanged={this._onTracksChanged}
+        onVdoMediaEnded={this._onMediaEnded}
+        onVdoError={this._onError}
         {...this.props}
       />
     );
@@ -39,6 +111,16 @@ VdoPlayerView.propTypes = {
   /* Native only */
   onInitSuccess: PropTypes.func,
   onInitFailure: PropTypes.func,
+  onVdoLoading: PropTypes.func,
+  onVdoLoaded: PropTypes.func,
+  onVdoLoadError: PropTypes.func,
+  onVdoPlayerStateChanged: PropTypes.func,
+  onVdoProgress: PropTypes.func,
+  onVdoBufferUpdate: PropTypes.func,
+  onVdoPlaybackSpeedChanged: PropTypes.func,
+  onVdoTracksChanged: PropTypes.func,
+  onVdoMediaEnded: PropTypes.func,
+  onVdoError: PropTypes.func,
 
   /* Wrapper component public api */
   embedInfo: PropTypes.object,
