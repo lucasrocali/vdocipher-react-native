@@ -26,21 +26,21 @@ export default class VdoPlayerView extends Component {
     }
   }
 
-  _onLoading = (event) => {
+  _onLoading = (embedInfo, event) => {
     if (this.props.onLoading) {
-      this.props.onLoading();
+      this.props.onLoading({embedInfo, ...event.nativeEvent});
     }
   }
 
-  _onLoaded = (event) => {
+  _onLoaded = (embedInfo, event) => {
     if (this.props.onLoaded) {
-      this.props.onLoaded();
+      this.props.onLoaded({embedInfo, ...event.nativeEvent});
     }
   }
 
-  _onLoadError = (event) => {
+  _onLoadError = (embedInfo, event) => {
     if (this.props.onLoadError) {
-      this.props.onLoadError(event.nativeEvent);
+      this.props.onLoadError({embedInfo, ...event.nativeEvent});
     }
   }
 
@@ -74,15 +74,15 @@ export default class VdoPlayerView extends Component {
     }
   }
 
-  _onMediaEnded = (event) => {
+  _onMediaEnded = (embedInfo, event) => {
     if (this.props.onMediaEnded) {
-      this.props.onMediaEnded();
+      this.props.onMediaEnded({embedInfo, ...event.nativeEvent});
     }
   }
 
-  _onError = (event) => {
+  _onError = (embedInfo, event) => {
     if (this.props.onError) {
-      this.props.onError(event.nativeEvent);
+      this.props.onError({embedInfo, ...event.nativeEvent});
     }
   }
 
@@ -91,16 +91,16 @@ export default class VdoPlayerView extends Component {
       <RCTVdoPlayerView
         onInitSuccess={this._onInitSuccess}
         onInitFailure={this._onInitFailure}
-        onVdoLoading={this._onLoading}
-        onVdoLoaded={this._onLoaded}
-        onVdoLoadError={this._onLoadError}
+        onVdoLoading={((embedInfo) => (event) => this._onLoading(embedInfo, event))(this.props.embedInfo)}
+        onVdoLoaded={((embedInfo) => (event) => this._onLoaded(embedInfo, event))(this.props.embedInfo)}
+        onVdoLoadError={((embedInfo) => (event) => this._onLoadError(embedInfo, event))(this.props.embedInfo)}
         onVdoPlayerStateChanged={this._onPlayerStateChanged}
         onVdoProgress={this._onProgress}
         onVdoBufferUpdate={this._onBufferUpdate}
         onVdoPlaybackSpeedChanged={this._onPlaybackSpeedChanged}
         onVdoTracksChanged={this._onTracksChanged}
-        onVdoMediaEnded={this._onMediaEnded}
-        onVdoError={this._onError}
+        onVdoMediaEnded={((embedInfo) => (event) => this._onMediaEnded(embedInfo, event))(this.props.embedInfo)}
+        onVdoError={((embedInfo) => (event) => this._onError(embedInfo, event))(this.props.embedInfo)}
         {...this.props}
       />
     );
