@@ -34,8 +34,9 @@ public class VdoPlayerViewManager extends SimpleViewManager<ReactVdoPlayerView> 
     @Override
     public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
-        builder.put("onInitSuccess", MapBuilder.of("registrationName", "onInitSuccess"));
-        builder.put("onInitFailure", MapBuilder.of("registrationName", "onInitFailure"));
+        for (String event : VdoEventEmitter.EVENTS) {
+            builder.put(event, MapBuilder.of("registrationName", event));
+        }
         return builder.build();
     }
 
