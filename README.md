@@ -86,3 +86,164 @@ const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
   embedInfo={embedInfo}
 />
 ```
+
+### VdoPlayerView props
+
+* [embedInfo](#embedinfo)
+
+### VdoPlayerView event props
+
+* [onInitializationSuccess](#oninitializationsuccess)
+* [onInitializationFailure](#oninitializationfailure)
+* [onLoading](#onloading)
+* [onLoaded](#onloaded)
+* [onLoadError](#onloadError)
+* [onPlayerStateChanged](#onplayerstatechanged)
+* [onProgress](#onprogress)
+* [onBufferUpdate](#onbufferUpdate)
+* [onPlaybackSpeedChanged](#onplaybackspeedchanged)
+* [onTracksChanged](#ontrackschanged)
+* [onMediaEnded](#onmediaended)
+* [onError](#onerror)
+
+### Props
+
+#### embedInfo
+
+Property | Type | Description
+--- | --- | ---
+otp | string | a valid otp
+playbackInfo | string | a valid playbackInfo
+
+### Event props
+
+#### onInitializationSuccess
+Callback function invoked when a native `VdoPlayer` is created.
+
+Typically, no handling is required when this is called. The internal player will automatically load the `embedInfo` provided in props.
+
+#### onInitializationFailure
+Callback function invoked when a `VdoPlayer` creation failed due to some reason. Playback will not happen.
+
+The error details are provided in the payload under `errorDescription`.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+errorDescription | object | error details
+
+`errorDescription`:
+
+Property | Type | Description
+--- | --- | ---
+errorCode | number | an integer identifying the error
+errorMsg | string | short message description of the error
+httpStatusCode | number | http status code if relevant, -1 otherwise
+
+#### onLoading
+Callback function invoked when a new video starts loading.
+
+#### onLoaded
+Callback function invoked when a new video has successfully loaded. Playback can begin now.
+
+#### onLoadError
+Callback function invoked when a video failed to load due to some reason.
+
+The error details are provided in the payload under `errorDescription`.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+errorDescription | object | error details
+embedInfo | object | embedInfo for which the error occurred
+
+`errorDescription`:
+
+Property | Type | Description
+--- | --- | ---
+errorCode | number | an integer identifying the error
+errorMsg | string | short message description of the error
+httpStatusCode | number | http status code if relevant, -1 otherwise
+
+#### onPlayerStateChanged
+Callback function invoked when player state changes.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+playerState | string | one of 'idle', 'buffering', 'ready' or 'ended'
+playWhenReady | boolean | whether playback will progress if playerState is 'ready'
+
+#### onProgress
+Callback function invoked to provided playback time updates.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+currentTime | number | current playback time in milliseconds
+
+#### onBufferUpdate
+Callback function invoked to provide buffered time updates.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+bufferTime | number | current buffered time in milliseconds
+
+#### onPlaybackSpeedChanged
+Callback function invoked when playback speed changes.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+playbackSpeed | number | current playback speed
+
+#### onTracksChanged
+Callback function invoked when available or selected track changes.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+availableTracks | object[] | array of available `track` objects
+selectedTracks | object[] | array of currently selected `track` objects
+
+`track`:
+
+Property | Type | Description
+--- | --- | ---
+id | number | an integer identifying the track
+type | string | one of 'audio', 'video', 'captions', 'combined' or 'unknown'
+language | string | optional: language of track if relevant
+bitrate | number | optional: bitrate in bps if relevant
+width | number | optional: width resolution if relevant
+height | number | optional: height resolution if relevant otherwise
+
+#### onMediaEnded
+Callback function invoked when a video reached end of playback.
+
+#### onError
+Callback function invoked when video playback is interrupted due to an error.
+
+The error details are provided in the payload under `errorDescription`.
+
+Payload:
+
+Property | Type | Description
+--- | --- | ---
+errorDescription | object | error details
+embedInfo | object | embedInfo for which the error occurred
+
+`errorDescription`:
+
+Property | Type | Description
+--- | --- | ---
+errorCode | number | an integer identifying the error
+errorMsg | string | short message description of the error
+httpStatusCode | number | http status code if relevant, -1 otherwise
