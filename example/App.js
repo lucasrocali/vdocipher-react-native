@@ -20,13 +20,19 @@ type Props = {};
 class HomeScreen extends Component<Props> {
   constructor(props) {
     super(props);
+    console.log('HomeScreen contructor');
     this.state = {};
   }
 
   componentDidMount() {
+    console.log('HomeScreen did mount');
     fetch("https://dev.vdocipher.com/api/site/homepage_video")
       .then(res => res.json())
       .then(resp => this.setState({otp: resp.otp, playbackInfo: resp.playbackInfo}));
+  }
+
+  componentWillUnmount() {
+    console.log('HomeScreen will unmount');
   }
 
   render() {

@@ -9,6 +9,15 @@ import { VdoPlayerView } from 'vdocipher-rn-bridge';
 export default class NativeControlsScreen extends Component {
   constructor(props) {
     super(props);
+    console.log('NativeControlsScreen contructor');
+  }
+
+  componentDidMount() {
+    console.log('NativeControlsScreen did mount');
+  }
+
+  componentWillUnmount() {
+    console.log('NativeControlsScreen will unmount');
   }
 
   render() {
