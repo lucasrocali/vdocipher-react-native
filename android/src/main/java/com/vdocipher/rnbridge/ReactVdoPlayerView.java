@@ -24,6 +24,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     private VdoPlayer vdoPlayer;
 
     private VdoInitParams pendingInitParams;
+    private boolean stopped = false;
 
     public ReactVdoPlayerView(ThemedReactContext context) {
         super(context);
@@ -40,11 +41,26 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         addView(playerControlView, matchParent);
     }
 
+    /**
+     * Frees resources used by player. Does not lose player instance.
+     */
+    public void stopPlayback() {
+        stopped = true;
+        playerView.packUp();
+    }
+
+    public void resumePlayback() {
+        // todo
+        stopped = false;
+    }
+
     @Override
     public void setId(int id) {
         super.setId(id);
         eventEmitter.setViewId(id);
     }
+
+    // InitializationListener impl
 
     @Override
     public void onInitializationSuccess(VdoPlayer.PlayerHost playerHost, VdoPlayer vdoPlayer, boolean restored) {
@@ -54,6 +70,9 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         playerControlView.setPlayer(vdoPlayer);
         eventEmitter.initSuccess(restored);
 
+        // don't continue to playback if stopped
+        if (stopped) return;
+
         // load pending params
         if (pendingInitParams != null) {
             Log.d(TAG, "load pending params");
@@ -61,8 +80,6 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
             pendingInitParams = null;
         }
     }
-
-    // InitializationListener impl
 
     @Override
     public void onInitializationFailure(PlayerHost playerHost, ErrorDescription errorDescription) {
