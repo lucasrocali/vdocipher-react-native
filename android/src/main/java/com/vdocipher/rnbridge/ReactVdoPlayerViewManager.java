@@ -43,7 +43,7 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
     @Override
     public void onDropViewInstance(ReactVdoPlayerView view) {
         Log.d(TAG, "dropped " + view.toString());
-        view.stopPlayback();
+        view.cleanUp();
     }
 
     @ReactProp(name = "embedInfo")

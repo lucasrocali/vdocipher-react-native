@@ -3,6 +3,7 @@ package com.vdocipher.rnbridge;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
@@ -12,11 +13,13 @@ import com.vdocipher.aegis.player.VdoPlayer.InitializationListener;
 import com.vdocipher.aegis.player.VdoPlayer.PlaybackEventListener;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 import com.vdocipher.aegis.player.VdoPlayerView;
+import com.vdocipher.aegis.player.internal.i;
 
 public class ReactVdoPlayerView extends FrameLayout implements InitializationListener,
-        PlaybackEventListener {
+        PlaybackEventListener, LifecycleEventListener {
     private static final String TAG = "ReactVdoPlayerView";
 
+    private final ThemedReactContext themedReactContext;
     private final VdoPlayerView playerView;
     private final VdoPlayerControlView playerControlView;
     private final VdoEventEmitter eventEmitter;
@@ -25,9 +28,12 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     private VdoInitParams pendingInitParams;
     private boolean stopped = false;
+    private Object playbackState = null;
 
     public ReactVdoPlayerView(ThemedReactContext context) {
         super(context);
+        context.addLifecycleEventListener(this);
+        themedReactContext = context;
 
         playerView = new VdoPlayerView(context);
         playerControlView = new VdoPlayerControlView(context);
@@ -42,15 +48,26 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     }
 
     /**
+     * Clean up all resources, references to this instance which may prevent it from being GC'ed.
+     */
+    public void cleanUp() {
+        stopPlayback();
+        themedReactContext.removeLifecycleEventListener(this);
+    }
+
+    /**
      * Frees resources used by player. Does not lose player instance.
      */
     public void stopPlayback() {
         stopped = true;
+        playbackState = playerView.getLastPlaybackState();
         playerView.packUp();
     }
 
-    public void resumePlayback() {
-        // todo
+    public void restorePlayback() {
+        if (stopped && playbackState != null) {
+            playerView.restore((i)playbackState);
+        }
         stopped = false;
     }
 
@@ -59,6 +76,40 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         super.setId(id);
         eventEmitter.setViewId(id);
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        Log.d(TAG, "onAttachedToWindow");
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        Log.d(TAG, "onDetachedFromWindow");
+        super.onDetachedFromWindow();
+    }
+
+    // LifecycleEventListener impl
+
+    @Override
+    public void onHostResume() {
+        Log.d(TAG, "onHostResume");
+        restorePlayback();
+    }
+
+    @Override
+    public void onHostPause() {
+        Log.d(TAG, "onHostPause");
+        stopPlayback();
+    }
+
+    @Override
+    public void onHostDestroy() {
+        Log.d(TAG, "onHostDestroy");
+        // this will probably never be called if the view is not on the first route into app;
+        // already unregistered as a lifecycle listener
+    }
+
 
     // InitializationListener impl
 
