@@ -13,8 +13,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class VdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerView> {
-    private static final String TAG = "VdoPlayerViewManager";
+public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerView> {
+    private static final String TAG = "ReactVdoPlayerViewMngr";
 
     private static final String REACT_CLASS = "RCTVdoPlayerView";
 
