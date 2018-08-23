@@ -90,6 +90,8 @@ const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
 ### VdoPlayerView props
 
 * [embedInfo](#embedinfo)
+* [showNativeControls](#shownativecontrols)
+* [playWhenReady](#playwhenready)
 
 ### VdoPlayerView event props
 
@@ -114,6 +116,18 @@ Property | Type | Description
 --- | --- | ---
 otp | string | a valid otp
 playbackInfo | string | a valid playbackInfo
+
+#### showNativeControls
+
+Controls whether natively embedded player controls are shown.
+* **true (default)** - show native controls
+* **false** - hide native controls
+
+#### playWhenReady
+
+Controls whether playback will progress if the player is in ready state.
+* **true (default)** - play when ready
+* **false** - pause playback
 
 ### Event props
 
