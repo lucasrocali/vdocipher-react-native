@@ -58,4 +58,9 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
             );
         }
     }
+
+    @ReactProp(name = "showNativeControls", defaultBoolean = true)
+    public void setShowNativeControls(ReactVdoPlayerView vdoPlayerView, boolean showNativeControls) {
+        vdoPlayerView.showNativeControls(showNativeControls);
+    }
 }

@@ -26,6 +26,9 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     private VdoPlayer vdoPlayer;
 
+    // from props
+    private boolean showNativeControls = true;
+
     private VdoInitParams pendingInitParams;
     private boolean stopped = false;
     private Object playbackState = null;
@@ -69,6 +72,11 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
             playerView.restore((i)playbackState);
         }
         stopped = false;
+    }
+
+    public void showNativeControls(boolean showNativeControls) {
+        this.showNativeControls = showNativeControls;
+        playerControlView.setVisibility(showNativeControls ? VISIBLE : GONE);
     }
 
     @Override
@@ -180,6 +188,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     @Override
     public void onLoaded(VdoInitParams vdoInitParams) {
+        vdoPlayer.setPlayWhenReady(true);
         eventEmitter.loaded(vdoInitParams, vdoPlayer.getCurrentMedia());
     }
 
