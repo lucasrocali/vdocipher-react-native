@@ -124,8 +124,8 @@ VdoPlayerView.propTypes = {
 
   /* Wrapper component public api */
   embedInfo: PropTypes.object,
-  showNativeControls: PropTypes.boolean,
-  playWhenReady: PropTypes.boolean,
+  showNativeControls: PropTypes.bool,
+  playWhenReady: PropTypes.bool,
   onInitializationSuccess: PropTypes.func,
   onInitializationFailure: PropTypes.func,
   onLoading: PropTypes.func,
