@@ -4,7 +4,7 @@ import {
   Text,
   View
 } from 'react-native';
-import { VdoPlayerView } from 'vdocipher-rn-bridge';
+import VdoPlayerControls from './VdoPlayerControls';
 
 export default class JSControlsScreen extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export default class JSControlsScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <VdoPlayerView style={styles.player}
+        <VdoPlayerControls style={styles.player}
           embedInfo={embedInfo}
           showNativeControls={false}
           onInitializationSuccess={() => console.log('init success')}
@@ -36,7 +36,7 @@ export default class JSControlsScreen extends Component {
           onMediaEnded={(args) => console.log('ended')}
         />
         <Text style={styles.description}>
-          The ui controls for the player are RN components
+          The ui controls for the player are react-native components
         </Text>
       </View>
     );
