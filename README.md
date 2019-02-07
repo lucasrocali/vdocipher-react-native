@@ -61,6 +61,15 @@ For installation you can choose either automatic or manual installation:
       compile project(':vdocipher-rn-bridge')
   	```
 
+### Installation troubleshooting
+If you encounter a build error for android project like _'Cannot find com.vdocipher.aegis:vdocipher-android:X.X.X',_
+you may need to add the following maven repository to your **android/build.gradle** under **allprojects -> repositories**:
+
+```
+maven {
+    url "https://github.com/VdoCipher/maven-repo/raw/master/repo"
+}
+```
 
 ## Usage
 
