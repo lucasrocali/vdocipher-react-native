@@ -84,6 +84,14 @@ export default class VdoPlayerControls extends Component {
     });
   }
 
+  _onProgressTouch = event => {
+    if (this._seekbarWidth) {
+      var positionX = event.nativeEvent.locationX;
+      var targetSeconds = Math.floor((positionX / this._seekbarWidth) * this.state.duration);
+      this._player.seek(targetSeconds * 1000);
+    }
+  }
+
   render() {
     var progressFraction = this.state.duration === 0 ? 0 : this.state.position / this.state.duration;
     var showPlayIcon = this.state.ended || !this.state.playWhenReady;
@@ -91,7 +99,7 @@ export default class VdoPlayerControls extends Component {
     return (
       <View style={styles.player.container}>
         <View>
-          <VdoPlayerView
+          <VdoPlayerView ref={player => this._player = player}
             style={styles.player.video}
             {...this.props}
             playWhenReady={this.state.playWhenReady}
@@ -115,7 +123,10 @@ export default class VdoPlayerControls extends Component {
               style={styles.controls.position}>
               {digitalTime(Math.floor(this.state.position))}
             </Text>
-            <View style={styles.controls.progressBarContainer}>
+            <TouchableWithoutFeedback style={styles.controls.progressBarContainer}
+              onPress={this._onProgressTouch}
+              onLayout={event => this._seekbarWidth = event.nativeEvent.layout.width}>
+              <View style={styles.controls.progressBarContainer}>
                 <ProgressBar style={styles.controls.progressBar}
                   progress={progressFraction}
                   color="#FFF"
@@ -124,7 +135,8 @@ export default class VdoPlayerControls extends Component {
                   width={null}
                   height={20}
                 />
-            </View>
+              </View>
+            </TouchableWithoutFeedback>
             <Text
               style={styles.controls.duration}>
               {digitalTime(Math.floor(this.state.duration))}
