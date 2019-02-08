@@ -87,6 +87,12 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         }
     }
 
+    public void seekTo(int targetMs) {
+        if (vdoPlayer != null) {
+            vdoPlayer.seekTo(targetMs);
+        }
+    }
+
     @Override
     public void setId(int id) {
         super.setId(id);

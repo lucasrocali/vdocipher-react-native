@@ -14,6 +14,12 @@ export default class VdoPlayerView extends Component {
     }
   }
 
+  seek = seekTargetMs => {
+    if (this._root) {
+      this._root.setNativeProps({seek: seekTargetMs});
+    }
+  }
+
   _onInitSuccess = (event) => {
     if (this.props.onInitializationSuccess) {
       this.props.onInitializationSuccess(event.nativeEvent);
@@ -88,7 +94,7 @@ export default class VdoPlayerView extends Component {
 
   render() {
     return (
-      <RCTVdoPlayerView
+      <RCTVdoPlayerView ref={component => this._root = component}
         onInitSuccess={this._onInitSuccess}
         onInitFailure={this._onInitFailure}
         onVdoLoading={((embedInfo) => (event) => this._onLoading(embedInfo, event))(this.props.embedInfo)}
@@ -121,6 +127,7 @@ VdoPlayerView.propTypes = {
   onVdoTracksChanged: PropTypes.func,
   onVdoMediaEnded: PropTypes.func,
   onVdoError: PropTypes.func,
+  seek: PropTypes.number,
 
   /* Wrapper component public api */
   embedInfo: PropTypes.object,

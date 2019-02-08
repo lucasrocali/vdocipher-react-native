@@ -68,4 +68,9 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
     public void setPlayWhenReady(ReactVdoPlayerView vdoPlayerView, boolean playWhenReady) {
         vdoPlayerView.setPlayWhenReady(playWhenReady);
     }
+
+    @ReactProp(name = "seek")
+    public void setSeek(ReactVdoPlayerView vdoPlayerView, final int targetMs) {
+        vdoPlayerView.seekTo(targetMs);
+    }
 }
