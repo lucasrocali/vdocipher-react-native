@@ -36,7 +36,7 @@ export default class VdoPlayerControls extends Component {
     });
   }
 
-  _onInitFailure = (error) => {
+  _onInitFailure = error => {
     this.setState({
       init: false,
       error: error.errorDescription
@@ -60,28 +60,30 @@ export default class VdoPlayerControls extends Component {
     // todo
   }
 
-  _onProgress = (progress) => {
+  _onPlayerStateChanged = newState => {
+    const { playerState } = newState;
+    this.setState({
+      buffering: playerState === 'buffering',
+      ended: playerState === 'ended'
+    })
+  }
+
+  _onProgress = progress => {
     this.setState({
       position: progress.currentTime / 1000
     });
   }
 
-  _onMediaEnded = () => {
-    this.setState({
-      playWhenReady: false,
-      ended: true
-    });
-  }
-
   _onPlayButtonTouch = () => {
-    if (this.state.progress >= this.state.duration) {
-      // todo
+    if (this.state.ended) {
+      this._player.seek(0);
+    } else {
+      this.setState(state => {
+        return {
+          playWhenReady: !state.playWhenReady
+        };
+      });
     }
-    this.setState(state => {
-      return {
-        playWhenReady: !state.playWhenReady
-      };
-    });
   }
 
   _onProgressTouch = event => {
@@ -109,8 +111,8 @@ export default class VdoPlayerControls extends Component {
             onLoading={this._onLoading}
             onLoaded={this._onLoaded}
             onTracksChanged={this._onTracksChanged}
+            onPlayerStateChanged={this._onPlayerStateChanged}
             onProgress={this._onProgress}
-            onMediaEnded={this._onMediaEnded}
           />
           <View style={styles.controls.container}>
             <TouchableWithoutFeedback onPress={this._onPlayButtonTouch}>
