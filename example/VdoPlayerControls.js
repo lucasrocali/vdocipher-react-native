@@ -123,14 +123,14 @@ export default class VdoPlayerControls extends Component {
               style={styles.controls.position}>
               {digitalTime(Math.floor(this.state.position))}
             </Text>
-            <TouchableWithoutFeedback style={styles.controls.progressBarContainer}
+            <TouchableWithoutFeedback
               onPress={this._onProgressTouch}
               onLayout={event => this._seekbarWidth = event.nativeEvent.layout.width}>
               <View style={styles.controls.progressBarContainer}>
                 <ProgressBar style={styles.controls.progressBar}
                   progress={progressFraction}
                   color="#FFF"
-                  unfilledColor="rgba(255, 255, 255, 0.4)"
+                  unfilledColor="rgba(255, 255, 255, 0.2)"
                   borderColor="#FFF"
                   width={null}
                   height={20}
@@ -173,7 +173,6 @@ const styles = {
       position: 'absolute',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
       paddingHorizontal: 16,
     },
     position: {
@@ -196,7 +195,7 @@ const styles = {
       alignItems: 'center',
     },
     progressBar: {
-      width:'100%',
+      flex: 1,
     }
   })
 };
