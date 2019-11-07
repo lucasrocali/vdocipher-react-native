@@ -13,7 +13,7 @@ import com.vdocipher.aegis.player.VdoPlayer.InitializationListener;
 import com.vdocipher.aegis.player.VdoPlayer.PlaybackEventListener;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 import com.vdocipher.aegis.player.VdoPlayerView;
-import com.vdocipher.aegis.player.internal.h;
+import com.vdocipher.aegis.player.internal.i;
 
 public class ReactVdoPlayerView extends FrameLayout implements InitializationListener,
         PlaybackEventListener, LifecycleEventListener {
@@ -70,7 +70,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     public void restorePlayback() {
         if (stopped && playbackState != null) {
-            playerView.restore((h)playbackState);
+            playerView.restore((i)playbackState);
         }
         stopped = false;
     }
