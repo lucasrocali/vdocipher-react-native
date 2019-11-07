@@ -1,6 +1,7 @@
 package com.vdocipher.rnbridge;
 
 import android.content.Intent;
+import android.app.Activity;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -37,8 +38,12 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
     String otp = embedInfo.getString("otp");
     String playbackInfo = embedInfo.getString("playbackInfo");
     android.util.Log.i("params", "[" + otp + ", " + playbackInfo + "]");
-    ReactApplicationContext context = getReactApplicationContext();
-    Intent intent = VdoPlayerActivity.getStartIntent(context, otp, playbackInfo);
-    context.startActivity(intent);
+    Activity currentActivity = getCurrentActivity();
+    if (currentActivity == null) {
+      android.util.Log.e("VdoRnBridgeModule", "Current Activity context could not be obtained.");
+    } else {
+      Intent intent = VdoPlayerActivity.getStartIntent(currentActivity, otp, playbackInfo);
+      currentActivity.startActivity(intent);
+    }
   }
 }
