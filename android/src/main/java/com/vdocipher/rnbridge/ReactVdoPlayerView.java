@@ -54,6 +54,8 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         addView(playerView, matchParent);
         addView(playerControlView, matchParent);
+
+        setKeepScreenOn(true);
     }
 
     /**
@@ -72,6 +74,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         playbackState = playerView.getLastPlaybackState();
         playerView.packUp();
 
+        setKeepScreenOn(false);
         if (fullscreen) {
             setFullscreen(false);
         }
@@ -80,6 +83,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     public void restorePlayback() {
         if (stopped && playbackState != null) {
             playerView.restore((i)playbackState);
+            setKeepScreenOn(true);
         }
         stopped = false;
     }
