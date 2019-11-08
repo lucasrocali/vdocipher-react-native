@@ -1,6 +1,9 @@
 package com.vdocipher.rnbridge;
 
+import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -16,7 +19,7 @@ import com.vdocipher.aegis.player.VdoPlayerView;
 import com.vdocipher.aegis.player.internal.i;
 
 public class ReactVdoPlayerView extends FrameLayout implements InitializationListener,
-        PlaybackEventListener, LifecycleEventListener {
+        PlaybackEventListener, LifecycleEventListener, VdoPlayerControlView.FullscreenActionListener {
     private static final String TAG = "ReactVdoPlayerView";
 
     private final ThemedReactContext themedReactContext;
@@ -29,6 +32,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     // from props
     private boolean showNativeControls = true;
     private boolean playWhenReady = true;
+    private boolean fullscreen = false;
 
     private VdoInitParams pendingInitParams;
     private boolean stopped = false;
@@ -41,6 +45,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
         playerView = new VdoPlayerView(context);
         playerControlView = new VdoPlayerControlView(context);
+        playerControlView.setFullscreenActionListener(this);
         eventEmitter = new VdoEventEmitter(context);
 
         playerView.initialize(this);
@@ -66,6 +71,10 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         stopped = true;
         playbackState = playerView.getLastPlaybackState();
         playerView.packUp();
+
+        if (fullscreen) {
+            setFullscreen(false);
+        }
     }
 
     public void restorePlayback() {
@@ -78,6 +87,37 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     public void showNativeControls(boolean showNativeControls) {
         this.showNativeControls = showNativeControls;
         playerControlView.setVisibility(showNativeControls ? VISIBLE : GONE);
+    }
+
+    public boolean setFullscreen(boolean enterFullscreen) {
+        if (fullscreen == enterFullscreen) {
+            return false;
+        }
+
+        Activity activity = themedReactContext.getCurrentActivity();
+        if (activity == null) {
+            return false;
+        }
+        View decorView = activity.getWindow().getDecorView();
+        int visibility;
+
+        if (enterFullscreen) {
+            if (Build.VERSION.SDK_INT >= 19) {
+                visibility = SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | SYSTEM_UI_FLAG_FULLSCREEN;
+            } else {
+                visibility = SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | SYSTEM_UI_FLAG_FULLSCREEN;
+            }
+            decorView.setSystemUiVisibility(visibility);
+        } else {
+            visibility = SYSTEM_UI_FLAG_VISIBLE;
+            decorView.setSystemUiVisibility(visibility);
+        }
+
+        fullscreen = enterFullscreen;
+        return true;
     }
 
     public void setPlayWhenReady(boolean playWhenReady) {
@@ -110,6 +150,14 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         Log.d(TAG, "onDetachedFromWindow");
         super.onDetachedFromWindow();
     }
+
+    // FullscreenActionListener impl
+
+    @Override
+    public boolean onFullscreenAction(boolean enterFullscreen) {
+        return setFullscreen(enterFullscreen);
+    }
+
 
     // LifecycleEventListener impl
 
