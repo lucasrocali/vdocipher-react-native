@@ -3,25 +3,28 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "test": "jest",
+    "lint": "eslint .",
     "android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.10",
+    "react": "16.8.6",
+    "react-native": "0.60.3",
     "react-native-progress": "^3.5.0",
     "react-native-vector-icons": "^6.2.0",
     "react-navigation": "^2.11.2",
     "vdocipher-rn-bridge": "file:.."
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "eslint": "^6.1.0",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
-    "metro-react-native-babel-preset": "^0.54.1",
-    "react-test-renderer": "16.8.3"
+    "metro-react-native-babel-preset": "0.54.1",
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"
