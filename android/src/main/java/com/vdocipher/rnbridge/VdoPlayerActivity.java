@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
-import com.vdocipher.aegis.player.VdoPlayerFragment;
+import com.vdocipher.aegis.player.VdoPlayerSupportFragment;
 
 public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.InitializationListener {
 
@@ -27,7 +27,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
     public static final String EXTRA_PLAYBACKINFO = "plabackInfo";
 
     private VdoPlayer player;
-    private VdoPlayerFragment playerFragment;
+    private VdoPlayerSupportFragment playerFragment;
     private VdoPlayerControlView playerControlView;
     private String eventLogString = "";
 
@@ -68,7 +68,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
             mPlaybackInfo = intent.getStringExtra(EXTRA_PLAYBACKINFO);
         }
 
-        playerFragment = (VdoPlayerFragment)getFragmentManager().findFragmentById(R.id.online_vdo_player_fragment);
+        playerFragment = (VdoPlayerSupportFragment)getSupportFragmentManager().findFragmentById(R.id.online_vdo_player_fragment);
         playerControlView = (VdoPlayerControlView)findViewById(R.id.player_control_view);
 
         currentOrientation = getResources().getConfiguration().orientation;
