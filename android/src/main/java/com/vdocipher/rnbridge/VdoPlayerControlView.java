@@ -124,6 +124,7 @@ public class VdoPlayerControlView extends FrameLayout {
         captionsButton.setOnClickListener(uiListener);
         enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen);
         enterFullscreenButton.setOnClickListener(uiListener);
+        enterFullscreenButton.setVisibility(GONE); // temporarily disabled fullscreen
         exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen);
         exitFullscreenButton.setOnClickListener(uiListener);
         exitFullscreenButton.setVisibility(GONE);
@@ -305,8 +306,11 @@ public class VdoPlayerControlView extends FrameLayout {
             return;
         }
 
-        enterFullscreenButton.setVisibility(fullscreen ? GONE : VISIBLE);
-        exitFullscreenButton.setVisibility(fullscreen ? VISIBLE : GONE);
+        // temporarily disabled fullscreen
+        //enterFullscreenButton.setVisibility(fullscreen ? GONE : VISIBLE);
+        //exitFullscreenButton.setVisibility(fullscreen ? VISIBLE : GONE);
+        enterFullscreenButton.setVisibility(GONE);
+        exitFullscreenButton.setVisibility(GONE);
     }
 
     private void showSpeedControlDialog() {
