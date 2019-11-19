@@ -32,6 +32,10 @@ development machine, and run the example app:
 
 For installation you can choose either automatic or manual installation:
 
+**Note**: If your app uses react-native version >= 0.60.0, you can skip the installation
+instructions. No explicit linking is required as new rn versions use
+[autolinking](https://facebook.github.io/react-native/blog/2019/07/03/version-60) for native modules.
+
 ### Mostly automatic installation
 
 `$ react-native link vdocipher-rn-bridge`
