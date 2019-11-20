@@ -20,5 +20,11 @@
   },
   "dependencies": {
     "prop-types": "^15.6.2"
-  }
+  },
+  "files": [
+    "android",
+    "ios",
+    "VdoPlayerView.js",
+    "index.js"
+  ]
 }
