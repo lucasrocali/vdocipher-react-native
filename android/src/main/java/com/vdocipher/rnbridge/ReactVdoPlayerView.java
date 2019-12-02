@@ -169,6 +169,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     public void onHostResume() {
         Log.d(TAG, "onHostResume");
         restorePlayback();
+        playerControlView.setFullscreenState(fullscreen);
     }
 
     @Override
