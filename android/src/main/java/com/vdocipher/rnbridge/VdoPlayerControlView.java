@@ -124,7 +124,6 @@ public class VdoPlayerControlView extends FrameLayout {
         captionsButton.setOnClickListener(uiListener);
         enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen);
         enterFullscreenButton.setOnClickListener(uiListener);
-        enterFullscreenButton.setVisibility(GONE); // temporarily disabled fullscreen
         exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen);
         exitFullscreenButton.setOnClickListener(uiListener);
         exitFullscreenButton.setVisibility(GONE);
@@ -306,11 +305,8 @@ public class VdoPlayerControlView extends FrameLayout {
             return;
         }
 
-        // temporarily disabled fullscreen
-        //enterFullscreenButton.setVisibility(fullscreen ? GONE : VISIBLE);
-        //exitFullscreenButton.setVisibility(fullscreen ? VISIBLE : GONE);
-        enterFullscreenButton.setVisibility(GONE);
-        exitFullscreenButton.setVisibility(GONE);
+        enterFullscreenButton.setVisibility(fullscreen ? GONE : VISIBLE);
+        exitFullscreenButton.setVisibility(fullscreen ? VISIBLE : GONE);
     }
 
     private void showSpeedControlDialog() {
@@ -484,6 +480,9 @@ public class VdoPlayerControlView extends FrameLayout {
                     }
                 }
             }
+            // todo temporary hack to fix control panel buttons layout issue
+            requestLayout();
+
             if (hideAfterTimeout) {
                 hideAfterTimeout();
             }
