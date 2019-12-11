@@ -14,7 +14,9 @@ import {
   Button,
   View
 } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import 'react-native-gesture-handler';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { startVideoScreen } from 'vdocipher-rn-bridge';
 import NativeControlsScreen from './NativeControlsScreen';
 import JSControlsScreen from './JSControlsScreen';
@@ -66,7 +68,7 @@ class HomeScreen extends Component<Props> {
   }
 }
 
-export default createStackNavigator(
+const RootStack = createStackNavigator(
   {
     Home: {
       screen: HomeScreen
@@ -83,6 +85,8 @@ export default createStackNavigator(
      headerMode: 'none',
   }
 );
+
+export default createAppContainer(RootStack);
 
 const styles = StyleSheet.create({
   container: {
