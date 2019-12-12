@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { VdoPlayerView } from 'vdocipher-rn-bridge';
 import ProgressBar from 'react-native-progress/Bar';
+import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 function digitalTime(time) {
@@ -26,7 +27,8 @@ export default class VdoPlayerControls extends Component {
       ended: false,
       duration: 0,
       position: 0,
-      speed: 1
+      speed: 1,
+      isFullscreen: false
     };
   }
 
@@ -86,6 +88,14 @@ export default class VdoPlayerControls extends Component {
     }
   }
 
+  _onEnterFullscreen = () => {
+    this.setState({isFullscreen: true});
+  }
+
+  _onExitFullscreen = () => {
+    this.setState({isFullscreen: false});
+  }
+
   _onProgressTouch = event => {
     if (this._seekbarWidth) {
       var positionX = event.nativeEvent.locationX;
@@ -94,9 +104,18 @@ export default class VdoPlayerControls extends Component {
     }
   }
 
+  _toggleFullscreen = () => {
+    if (this.state.isFullscreen) {
+      this._player.exitFullscreen();
+    } else {
+      this._player.enterFullscreen();
+    }
+  }
+
   render() {
     var progressFraction = this.state.duration === 0 ? 0 : this.state.position / this.state.duration;
     var showPlayIcon = this.state.ended || !this.state.playWhenReady;
+    var isFullscreen = this.state.isFullscreen;
 
     return (
       <View style={styles.player.container}>
@@ -113,6 +132,8 @@ export default class VdoPlayerControls extends Component {
             onTracksChanged={this._onTracksChanged}
             onPlayerStateChanged={this._onPlayerStateChanged}
             onProgress={this._onProgress}
+            onEnterFullscreen={this._onEnterFullscreen}
+            onExitFullscreen={this._onExitFullscreen}
           />
           <View style={styles.controls.container}>
             <TouchableWithoutFeedback onPress={this._onPlayButtonTouch}>
@@ -143,6 +164,13 @@ export default class VdoPlayerControls extends Component {
               style={styles.controls.duration}>
               {digitalTime(Math.floor(this.state.duration))}
             </Text>
+            <TouchableWithoutFeedback onPress={this._toggleFullscreen}>
+              <MatIcon name = {isFullscreen ? "fullscreen-exit" : "fullscreen"}
+                style={styles.controls.fullscreen}
+                size={30}
+                color="#FFF"
+              />
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </View>
@@ -198,6 +226,9 @@ const styles = {
     },
     progressBar: {
       flex: 1,
+    },
+    fullscreen: {
+      marginLeft: 10,
     }
   })
 };
