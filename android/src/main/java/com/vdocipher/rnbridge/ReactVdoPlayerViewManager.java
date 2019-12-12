@@ -73,4 +73,9 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
     public void setSeek(ReactVdoPlayerView vdoPlayerView, final int targetMs) {
         vdoPlayerView.seekTo(targetMs);
     }
+
+    @ReactProp(name = "fullscreen", defaultBoolean = false)
+    public void setFullscreen(ReactVdoPlayerView vdoPlayerView, boolean fullscreen) {
+        vdoPlayerView.setFullscreen(fullscreen);
+    }
 }

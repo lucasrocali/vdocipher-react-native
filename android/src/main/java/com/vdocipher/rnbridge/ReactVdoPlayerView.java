@@ -121,6 +121,11 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         }
 
         fullscreen = enterFullscreen;
+        if (fullscreen) {
+            eventEmitter.enterFullscreen();
+        } else {
+            eventEmitter.exitFullscreen();
+        }
         return true;
     }
 

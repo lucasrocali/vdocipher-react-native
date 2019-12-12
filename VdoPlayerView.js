@@ -20,6 +20,18 @@ export default class VdoPlayerView extends Component {
     }
   }
 
+  enterFullscreen = () => {
+    if (this._root) {
+      this._root.setNativeProps({fullscreen: true});
+    }
+  }
+
+  exitFullscreen = () => {
+    if (this._root) {
+      this._root.setNativeProps({fullscreen: false});
+    }
+  }
+
   _onInitSuccess = (event) => {
     if (this.props.onInitializationSuccess) {
       this.props.onInitializationSuccess(event.nativeEvent);
@@ -92,6 +104,18 @@ export default class VdoPlayerView extends Component {
     }
   }
 
+  _onEnterFullscreen = (event) => {
+    if (this.props.onEnterFullscreen) {
+      this.props.onEnterFullscreen();
+    }
+  }
+
+  _onExitFullscreen = (event) => {
+    if (this.props.onExitFullscreen) {
+      this.props.onExitFullscreen();
+    }
+  }
+
   render() {
     return (
       <RCTVdoPlayerView ref={component => this._root = component}
@@ -107,6 +131,8 @@ export default class VdoPlayerView extends Component {
         onVdoTracksChanged={this._onTracksChanged}
         onVdoMediaEnded={((embedInfo) => (event) => this._onMediaEnded(embedInfo, event))(this.props.embedInfo)}
         onVdoError={((embedInfo) => (event) => this._onError(embedInfo, event))(this.props.embedInfo)}
+        onVdoEnterFullscreen={this._onEnterFullscreen}
+        onVdoExitFullscreen={this._onExitFullscreen}
         {...this.props}
       />
     );
@@ -128,6 +154,9 @@ VdoPlayerView.propTypes = {
   onVdoMediaEnded: PropTypes.func,
   onVdoError: PropTypes.func,
   seek: PropTypes.number,
+  fullscreen: PropTypes.bool,
+  onVdoEnterFullscreen: PropTypes.func,
+  onVdoExitFullscreen: PropTypes.func,
 
   /* Wrapper component public api */
   embedInfo: PropTypes.object,
@@ -145,6 +174,8 @@ VdoPlayerView.propTypes = {
   onTracksChanged: PropTypes.func,
   onMediaEnded: PropTypes.func,
   onError: PropTypes.func,
+  onEnterFullscreen: PropTypes.func,
+  onExitFullscreen: PropTypes.func,
 
   /* Required */
   ...ViewPropTypes,

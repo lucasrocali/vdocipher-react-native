@@ -30,6 +30,8 @@ class VdoEventEmitter {
     private static final String EVENT_TRACKS_CHANGED = "onVdoTracksChanged";
     private static final String EVENT_MEDIA_ENDED = "onVdoMediaEnded";
     private static final String EVENT_ERROR = "onVdoError";
+    private static final String EVENT_ENTER_FULLSCREEN = "onVdoEnterFullscreen";
+    private static final String EVENT_EXIT_FULLSCREEN = "onVdoExitFullscreen";
 
     static final String[] EVENTS = {
             EVENT_INIT_SUCCESS, EVENT_INIT_FAILURE,
@@ -38,7 +40,8 @@ class VdoEventEmitter {
             EVENT_PROGRESS, EVENT_BUFFER_UPDATE,
             EVENT_PLAYBACK_SPEED_CHANGED, EVENT_TRACKS_CHANGED,
             EVENT_MEDIA_ENDED,
-            EVENT_ERROR
+            EVENT_ERROR,
+            EVENT_ENTER_FULLSCREEN, EVENT_EXIT_FULLSCREEN
     };
 
     @Retention(RetentionPolicy.SOURCE)
@@ -48,7 +51,8 @@ class VdoEventEmitter {
             EVENT_PROGRESS, EVENT_BUFFER_UPDATE,
             EVENT_PLAYBACK_SPEED_CHANGED, EVENT_TRACKS_CHANGED,
             EVENT_MEDIA_ENDED,
-            EVENT_ERROR})
+            EVENT_ERROR,
+            EVENT_ENTER_FULLSCREEN, EVENT_EXIT_FULLSCREEN})
     @interface VdoEvent {}
 
     private static final String EVENT_PROP_RESTORED = "restored";
@@ -179,6 +183,14 @@ class VdoEventEmitter {
         WritableMap event = Arguments.createMap();
         event.putMap(EVENT_PROP_ERROR_DESCRIPTION, errDes);
         receiveEvent(EVENT_ERROR, event);
+    }
+
+    void enterFullscreen() {
+        receiveEvent(EVENT_ENTER_FULLSCREEN, null);
+    }
+
+    void exitFullscreen() {
+        receiveEvent(EVENT_EXIT_FULLSCREEN, null);
     }
 
     private static WritableMap makeErrorDescriptionMap(ErrorDescription errorDescription) {
