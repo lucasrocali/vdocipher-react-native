@@ -33,6 +33,8 @@ export default class NativeControlsScreen extends Component {
           onLoaded={(args) => console.log('loaded')}
           onTracksChanged={(args) => console.log('tracks changed')}
           onMediaEnded={(args) => console.log('ended')}
+          onEnterFullscreen={() => console.log('enter fullscreen')}
+          onExitFullscreen={() => console.log('exit fullscreen')}
         />
         <Text style={styles.description}>
           The ui controls for the player are embedded inside the native view
