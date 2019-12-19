@@ -16,7 +16,7 @@ import com.vdocipher.aegis.player.VdoPlayer.InitializationListener;
 import com.vdocipher.aegis.player.VdoPlayer.PlaybackEventListener;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 import com.vdocipher.aegis.player.VdoPlayerView;
-import com.vdocipher.aegis.player.internal.i;
+import com.vdocipher.aegis.player.a.g;
 
 public class ReactVdoPlayerView extends FrameLayout implements InitializationListener,
         PlaybackEventListener, LifecycleEventListener, VdoPlayerControlView.FullscreenActionListener {
@@ -82,7 +82,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     public void restorePlayback() {
         if (stopped && playbackState != null) {
-            playerView.restore((i)playbackState);
+            playerView.restore((g)playbackState);
             setKeepScreenOn(true);
         }
         stopped = false;
