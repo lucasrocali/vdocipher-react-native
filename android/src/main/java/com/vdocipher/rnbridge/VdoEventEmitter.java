@@ -13,6 +13,7 @@ import com.vdocipher.aegis.media.MediaInfo;
 import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
+import static com.vdocipher.rnbridge.Utils.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -58,18 +59,6 @@ class VdoEventEmitter {
     private static final String EVENT_PROP_RESTORED = "restored";
 
     private static final String EVENT_PROP_MEDIA_INFO = "mediaInfo";
-    private static final String EVENT_PROP_MEDIA_INFO_ID = "mediaId";
-    private static final String EVENT_PROP_MEDIA_INFO_TYPE = "type";
-    private static final String EVENT_PROP_MEDIA_INFO_TITLE = "title";
-    private static final String EVENT_PROP_MEDIA_INFO_DESCRIPTION = "description";
-    private static final String EVENT_PROP_MEDIA_INFO_DURATION = "duration";
-
-    private static final String EVENT_PROP_TRACK_ID = "id";
-    private static final String EVENT_PROP_TRACK_TYPE = "type";
-    private static final String EVENT_PROP_TRACK_LANGUAGE = "language";
-    private static final String EVENT_PROP_TRACK_BITRATE = "bitrate";
-    private static final String EVENT_PROP_TRACK_WIDTH = "width";
-    private static final String EVENT_PROP_TRACK_HEIGHT = "height";
 
     private static final String EVENT_PROP_CURRENT_TIME = "currentTime";
     private static final String EVENT_PROP_BUFFER_TIME = "bufferTime";
@@ -82,9 +71,6 @@ class VdoEventEmitter {
     private static final String EVENT_PROP_PLAYBACK_SPEED = "playbackSpeed";
 
     private static final String EVENT_PROP_ERROR_DESCRIPTION = "errorDescription";
-    private static final String EVENT_PROP_ERROR_CODE = "errorCode";
-    private static final String EVENT_PROP_ERROR_MSG = "errorMsg";
-    private static final String EVENT_PROP_ERROR_HTTP_CODE = "httpStatusCode";
 
     private final RCTEventEmitter eventEmitter;
     private int viewId = View.NO_ID;
@@ -116,12 +102,7 @@ class VdoEventEmitter {
     }
 
     void loaded(VdoInitParams vdoInitParams, MediaInfo mediaInfo) {
-        WritableMap mInfo = Arguments.createMap();
-        mInfo.putString(EVENT_PROP_MEDIA_INFO_ID, mediaInfo.mediaId);
-        mInfo.putInt(EVENT_PROP_MEDIA_INFO_TYPE, mediaInfo.type);
-        mInfo.putString(EVENT_PROP_MEDIA_INFO_TITLE, mediaInfo.title);
-        mInfo.putString(EVENT_PROP_MEDIA_INFO_DESCRIPTION, mediaInfo.description);
-        mInfo.putInt(EVENT_PROP_MEDIA_INFO_DURATION, (int)mediaInfo.duration);
+        WritableMap mInfo = makeMediaInfoMap(mediaInfo);
 
         WritableMap event = Arguments.createMap();
         event.putMap(EVENT_PROP_MEDIA_INFO, mInfo);
@@ -191,61 +172,6 @@ class VdoEventEmitter {
 
     void exitFullscreen() {
         receiveEvent(EVENT_EXIT_FULLSCREEN, null);
-    }
-
-    private static WritableMap makeErrorDescriptionMap(ErrorDescription errorDescription) {
-        WritableMap errDes = Arguments.createMap();
-        errDes.putInt(EVENT_PROP_ERROR_CODE, errorDescription.errorCode);
-        errDes.putString(EVENT_PROP_ERROR_MSG, errorDescription.errorMsg);
-        errDes.putInt(EVENT_PROP_ERROR_HTTP_CODE, errorDescription.httpStatusCode);
-        return errDes;
-    }
-
-    private static WritableArray makeTrackMapArray(Track[] tracks) {
-        WritableArray trackArray = Arguments.createArray();
-        for (Track track: tracks) {
-            trackArray.pushMap(makeTrackMap(track));
-        }
-        return trackArray;
-    }
-
-    private static WritableMap makeTrackMap(Track track) {
-        WritableMap errDes = Arguments.createMap();
-        errDes.putInt(EVENT_PROP_TRACK_ID, track.id);
-        errDes.putString(EVENT_PROP_TRACK_TYPE, trackType(track.type));
-        errDes.putString(EVENT_PROP_TRACK_LANGUAGE, track.language);
-        errDes.putInt(EVENT_PROP_TRACK_BITRATE, track.bitrate);
-        errDes.putInt(EVENT_PROP_TRACK_WIDTH, track.width);
-        errDes.putInt(EVENT_PROP_TRACK_HEIGHT, track.height);
-        return errDes;
-    }
-
-    private static String trackType(int type) {
-        switch (type) {
-            case Track.TYPE_AUDIO:
-                return "audio";
-            case Track.TYPE_VIDEO:
-                return "video";
-            case Track.TYPE_CAPTIONS:
-                return "captions";
-            case Track.TYPE_COMBINED:
-                return "combined";
-            default:
-                return "unknown";
-        }
-    }
-
-    private static String stateName(int playerState) {
-        switch (playerState) {
-            case VdoPlayer.STATE_IDLE:
-                return "idle";
-            case VdoPlayer.STATE_BUFFERING:
-                return "buffering";
-            case VdoPlayer.STATE_READY:
-                return "ready";
-            default:
-                return "ended";
-        }
     }
 
     private void receiveEvent(@VdoEvent String type, WritableMap event) {
