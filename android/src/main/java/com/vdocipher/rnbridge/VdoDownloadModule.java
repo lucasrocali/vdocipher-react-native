@@ -96,13 +96,14 @@ public class VdoDownloadModule extends ReactContextBaseJavaModule {
         enqueueDownload(nativeId, requestOptions, new EnqueueFailureCallback(errorCallback), successCallback);
     }
 
+    @ReactMethod
     public void query(ReadableMap queryFilters,
                       Callback errorCallback,
                       Callback successCallback) {
         try {
             // Read query filters
-            ReadableArray mediaIdFilters = queryFilters.getArray("mediaId");
-            ReadableArray statusFilters = queryFilters.getArray("status");
+            ReadableArray mediaIdFilters = queryFilters != null ? queryFilters.getArray("mediaId") : null;
+            ReadableArray statusFilters = queryFilters != null ? queryFilters.getArray("status") : null;
 
             // Build query
             VdoDownloadManager.Query query = new VdoDownloadManager.Query();
