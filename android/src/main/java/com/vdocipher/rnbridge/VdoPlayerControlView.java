@@ -19,6 +19,8 @@ import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -57,6 +59,7 @@ public class VdoPlayerControlView extends FrameLayout {
     private final SeekBar seekBar;
     private final Button speedControlButton;
     private final ImageButton captionsButton;
+    private final ImageButton qualityButton;
     private final ImageButton enterFullscreenButton;
     private final ImageButton exitFullscreenButton;
     private final ProgressBar loaderView;
@@ -122,6 +125,8 @@ public class VdoPlayerControlView extends FrameLayout {
         speedControlButton.setOnClickListener(uiListener);
         captionsButton = findViewById(R.id.vdo_captions);
         captionsButton.setOnClickListener(uiListener);
+        qualityButton = findViewById(R.id.vdo_quality);
+        qualityButton.setOnClickListener(uiListener);
         enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen);
         enterFullscreenButton.setOnClickListener(uiListener);
         exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen);
@@ -322,62 +327,70 @@ public class VdoPlayerControlView extends FrameLayout {
                 .show();
     }
 
-    private void showCaptionsDialog() {
+    private void showTrackSelectionDialog(int trackType) {
         if (player == null) {
             return;
         }
 
-        // get all available captions tracks
+        // get all available tracks of type trackType
         Track[] availableTracks = player.getAvailableTracks();
         Log.i(TAG, availableTracks.length + " tracks available");
-        ArrayList<Track> textTrackList = new ArrayList<>();
+        ArrayList<Track> typeTrackList = new ArrayList<>();
         for (Track availableTrack : availableTracks) {
-            if (availableTrack.type == Track.TYPE_CAPTIONS) {
-                textTrackList.add(availableTrack);
+            if (availableTrack.type == trackType) {
+                typeTrackList.add(availableTrack);
             }
         }
 
-        // get the selected captions track
+        // get the selected track of type trackType
         Track[] selectedTracks = player.getSelectedTracks();
-        Track selectedTextTrack = null;
+        Track selectedTypeTrack = null;
         for (Track selectedTrack : selectedTracks) {
-            if (selectedTrack.type == Track.TYPE_CAPTIONS) {
-                selectedTextTrack = selectedTrack;
+            if (selectedTrack.type == trackType) {
+                selectedTypeTrack = selectedTrack;
                 break;
             }
         }
 
-        // get index of selected captions track in "textTrackList" to indicate selection in dialog
+        // get index of selected type track in "typeTrackList" to indicate selection in dialog
         int selectedIndex = -1;
-        if (selectedTextTrack != null) {
-            for (int i = 0; i < textTrackList.size(); i++) {
-                if (textTrackList.get(i).equals(selectedTextTrack)) {
+        if (selectedTypeTrack != null) {
+            for (int i = 0; i < typeTrackList.size(); i++) {
+                if (typeTrackList.get(i).equals(selectedTypeTrack)) {
                     selectedIndex = i;
                     break;
                 }
             }
         }
 
-        // if captions tracks are available, lets add a DISABLE_CAPTIONS track for turning off captions
-        if (textTrackList.size() > 0) {
-            textTrackList.add(Track.DISABLE_CAPTIONS);
-
-            // if no captions are selected, indicate DISABLE_CAPTIONS as selected in dialog
-            if (selectedIndex < 0) selectedIndex = textTrackList.size() - 1;
-        }
-
-        // show the text tracks in dialog for selection
-        Track[] availableTextTracks = textTrackList.toArray(new Track[0]);
-        Log.i(TAG, "total " + availableTextTracks.length + ", selected " + selectedIndex);
-        showSelectionDialog("CAPTIONS", availableTextTracks, selectedIndex);
-    }
-
-    private void showSelectionDialog(CharSequence title, final Track[] tracks, final int selectedTrackIndex) {
         // first, let's convert tracks to array of TrackHolders for better display in dialog
         ArrayList<TrackHolder> trackHolderList = new ArrayList<>();
-        for (Track track : tracks) trackHolderList.add(new TrackHolder(track));
-        final TrackHolder[] trackHolders = trackHolderList.toArray(new TrackHolder[0]);
+        for (Track track : typeTrackList) trackHolderList.add(new TrackHolder(track));
 
+        // if captions tracks are available, lets add a DISABLE_CAPTIONS track for turning off captions
+        if (trackType == Track.TYPE_CAPTIONS && trackHolderList.size() > 0) {
+            trackHolderList.add(new TrackHolder(Track.DISABLE_CAPTIONS));
+
+            // if no captions are selected, indicate DISABLE_CAPTIONS as selected in dialog
+            if (selectedIndex < 0) selectedIndex = trackHolderList.size() - 1;
+        } else if (trackType == Track.TYPE_VIDEO) {
+            // todo auto option
+            if (trackHolderList.size() == 1) {
+                // just show a default track option
+                trackHolderList.clear();
+                trackHolderList.add(TrackHolder.DEFAULT);
+            }
+        }
+
+        final TrackHolder[] trackHolders = trackHolderList.toArray(new TrackHolder[0]);
+        Log.i(TAG, "total " + trackHolders.length + ", selected " + selectedIndex);
+
+        // show the type tracks in dialog for selection
+        String title = trackType == Track.TYPE_CAPTIONS ? "CAPTIONS" : "Quality";
+        showSelectionDialog(title, trackHolders, selectedIndex);
+    }
+
+    private void showSelectionDialog(CharSequence title, final TrackHolder[] trackHolders, final int selectedTrackIndex) {
         ListAdapter adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_single_choice, trackHolders);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -397,7 +410,6 @@ public class VdoPlayerControlView extends FrameLayout {
                 })
                 .create()
                 .show();
-
     }
 
     private void showError(ErrorDescription errorDescription) {
@@ -466,7 +478,10 @@ public class VdoPlayerControlView extends FrameLayout {
                     showSpeedControlDialog();
                 } else if (v == captionsButton) {
                     hideAfterTimeout = false;
-                    showCaptionsDialog();
+                    showTrackSelectionDialog(Track.TYPE_CAPTIONS);
+                } else if (v == qualityButton) {
+                    hideAfterTimeout = false;
+                    showTrackSelectionDialog(Track.TYPE_VIDEO);
                 } else if (v == enterFullscreenButton || v == exitFullscreenButton) {
                     toggleFullscreen();
                 } else if (v == errorView || v == errorTextView) {
@@ -545,19 +560,51 @@ public class VdoPlayerControlView extends FrameLayout {
      * captions tracks for displaying to user.
      */
     private static class TrackHolder {
+        static final TrackHolder DEFAULT = new TrackHolder(null) {
+            @Override
+            public String toString() {
+                return "Default";
+            }
+        };
+
         final Track track;
 
         TrackHolder(Track track) {
             this.track = track;
         }
 
+        /**
+         * Change this implementation to show track descriptions as per your app's UI requirements.
+         */
         @Override
         public String toString() {
             if (track == Track.DISABLE_CAPTIONS) {
                 return "Turn off Captions";
+            } else if (track.type == Track.TYPE_VIDEO) {
+                return track.bitrate / 1024 + "kbps (" + dataExpenditurePerHour(track.bitrate) + ")";
             }
 
             return track.type == Track.TYPE_CAPTIONS ? track.language : track.toString();
+        }
+
+        private String dataExpenditurePerHour(int bitsPerSec) {
+            final long bytesPerHour = bitsPerSec <= 0 ? 0 : bitsPerSec * 3600L / 8;
+            if (bytesPerHour == 0) {
+                return "-";
+            } else {
+                float megabytesPerHour = bytesPerHour / (float)(1024 * 1024);
+
+                if (megabytesPerHour < 1) {
+                    return "1 MB per hour";
+                } else if (megabytesPerHour < 1000) {
+                    return (int)megabytesPerHour + " MB per hour";
+                } else {
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    df.setRoundingMode(RoundingMode.CEILING);
+                    return df.format(megabytesPerHour / 1024) + " GB per hour";
+                }
+
+            }
         }
     }
 }
