@@ -137,6 +137,31 @@ public class VdoDownloadModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void remove(ReadableArray deleteIds,
+                       Callback errorCallback,
+                       Callback successCallback) {
+        try {
+            // Read mediaIds to delete
+            final String[] mediaIdsToDelete;
+            if (deleteIds == null) {
+                mediaIdsToDelete = new String[0];
+            } else {
+                mediaIdsToDelete = new String[deleteIds.size()];
+                for (int i = 0; i < deleteIds.size(); i++) {
+                    mediaIdsToDelete[i] = deleteIds.getString(i);
+                }
+            }
+
+            VdoDownloadManager vdoDownloadManager = VdoDownloadManager.getInstance(getReactApplicationContext());
+            vdoDownloadManager.remove(mediaIdsToDelete);
+            successCallback.invoke();
+        } catch (RuntimeException e) {
+            Log.e(TAG, "error deleting: " + Log.getStackTraceString(e));
+            errorCallback.invoke(e.getClass().getName(), e.getMessage());
+        }
+    }
+
     private void enqueueDownload(String nativeId,
                                 ReadableMap requestOptions,
                                 EnqueueFailureCallback errorCallback,
