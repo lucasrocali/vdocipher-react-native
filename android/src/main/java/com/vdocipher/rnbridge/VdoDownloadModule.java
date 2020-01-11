@@ -3,17 +3,22 @@ package com.vdocipher.rnbridge;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.vdocipher.aegis.media.ErrorCodes;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.offline.DownloadOptions;
 import com.vdocipher.aegis.offline.DownloadRequest;
 import com.vdocipher.aegis.offline.DownloadSelections;
+import com.vdocipher.aegis.offline.DownloadStatus;
 import com.vdocipher.aegis.offline.OptionsDownloader;
 import com.vdocipher.aegis.offline.VdoDownloadManager;
 
@@ -21,6 +26,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.vdocipher.rnbridge.Utils.*;
 
@@ -33,7 +39,7 @@ import static com.vdocipher.rnbridge.Utils.*;
  * <li>Manage downloads (query or delete downloads)
  */
 
-public class VdoDownloadModule extends ReactContextBaseJavaModule {
+public class VdoDownloadModule extends ReactContextBaseJavaModule implements VdoDownloadManager.EventListener {
     private static final String TAG = "VdoDownloadModule";
 
     private final HashMap<String, DownloadOptions> downloadOptionsStore;
@@ -42,6 +48,7 @@ public class VdoDownloadModule extends ReactContextBaseJavaModule {
     public VdoDownloadModule(ReactApplicationContext reactContext) {
         super(reactContext);
         downloadOptionsStore = new HashMap<>();
+        VdoDownloadManager.getInstance(reactContext).addEventListener(this);
     }
 
     @Override
@@ -162,10 +169,45 @@ public class VdoDownloadModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @Override
+    public void onCatalystInstanceDestroy() {
+        super.onCatalystInstanceDestroy();
+        // TODO unregister EventListener
+    }
+
+    // VdoDownloadManager.EventListener impl
+
+    @Override
+    public void onQueued(String mediaId, DownloadStatus downloadStatus) {
+        sendEvent(getReactApplicationContext(), "onQueued", mediaId, downloadStatus);
+    }
+
+    @Override
+    public void onChanged(String mediaId, DownloadStatus downloadStatus) {
+        sendEvent(getReactApplicationContext(), "onChanged", mediaId, downloadStatus);
+    }
+
+    @Override
+    public void onCompleted(String mediaId, DownloadStatus downloadStatus) {
+        sendEvent(getReactApplicationContext(), "onCompleted", mediaId, downloadStatus);
+    }
+
+    @Override
+    public void onFailed(String mediaId, DownloadStatus downloadStatus) {
+        sendEvent(getReactApplicationContext(), "onFailed", mediaId, downloadStatus);
+    }
+
+    @Override
+    public void onDeleted(String mediaId) {
+        sendEvent(getReactApplicationContext(), "onDeleted", mediaId, null);
+    }
+
+    // Private
+
     private void enqueueDownload(String nativeId,
-                                ReadableMap requestOptions,
-                                EnqueueFailureCallback errorCallback,
-                                Callback successCallback) {
+                                 ReadableMap requestOptions,
+                                 EnqueueFailureCallback errorCallback,
+                                 Callback successCallback) {
         try {
             // Ensure downloadOptions is available
             // TODO remove used from store/cache
@@ -213,6 +255,20 @@ public class VdoDownloadModule extends ReactContextBaseJavaModule {
             Log.e(TAG, "error enqueuing download request: " + Log.getStackTraceString(e));
             errorCallback.invoke(e.getClass().getName(), e.getMessage());
         }
+    }
+
+    private void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           String mediaId,
+                           @Nullable DownloadStatus downloadStatus) {
+        WritableMap params = Arguments.createMap();
+        params.putString("mediaId", mediaId);
+        if (downloadStatus != null) {
+            params.putMap("downloadStatus", makeDownloadStatusMap(downloadStatus));
+        }
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
     }
 
     private String getDownloadLocation(@Nonnull Context context) {
