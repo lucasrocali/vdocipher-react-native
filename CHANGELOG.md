@@ -1,6 +1,6 @@
 ## Changelog
 
-### 1.5.0
+### 1.5.1
 * Add downloads api
 * Update native controls to show quality toggle button
 * Update VdoCipher android sdk dependency to 1.3.2
