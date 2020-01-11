@@ -11,6 +11,7 @@
  */
 import { NativeModules } from 'react-native';
 import VdoPlayerView from './VdoPlayerView';
+import VdoDownload from './downloads';
 
 const { VdocipherRnBridge } = NativeModules;
 
@@ -20,5 +21,6 @@ const startVideoScreen = (params) => {
 
 export {
   startVideoScreen,
-  VdoPlayerView
+  VdoPlayerView,
+  VdoDownload
 }
