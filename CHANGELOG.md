@@ -1,5 +1,10 @@
 ## Changelog
 
+### 1.5.0
+* Add downloads api
+* Update native controls to show quality toggle button
+* Update VdoCipher android sdk dependency to 1.3.2
+
 ### 1.4.0
 * Add JS fullscreen api
 * Update VdoCipher android sdk dependency to 1.3.1
