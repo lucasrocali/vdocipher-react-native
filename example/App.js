@@ -20,6 +20,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { startVideoScreen } from 'vdocipher-rn-bridge';
 import NativeControlsScreen from './NativeControlsScreen';
 import JSControlsScreen from './JSControlsScreen';
+import DownloadsScreen from './DownloadsScreen';
 
 type Props = {};
 class HomeScreen extends Component<Props> {
@@ -63,6 +64,10 @@ class HomeScreen extends Component<Props> {
           title={ready ? "Start video with JS controls" : "Loading..."}
           onPress={() => this.props.navigation.navigate('JSControls', {embedInfo: {otp, playbackInfo}})}
         />
+        <Button
+          title='Downloads'
+          onPress={() => this.props.navigation.navigate('Downloads')}
+        />
       </View>
     );
   }
@@ -78,6 +83,9 @@ const RootStack = createStackNavigator(
     },
     JSControls: {
       screen: JSControlsScreen
+    },
+    Downloads: {
+      screen: DownloadsScreen
     },
   },
   {
