@@ -49,13 +49,19 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
     @ReactProp(name = "embedInfo")
     public void setEmbedInfo(ReactVdoPlayerView vdoPlayerView, @Nullable ReadableMap embedInfo) {
         if (embedInfo != null) {
-            vdoPlayerView.load(
-                    new VdoInitParams.Builder()
-                    .setOtp(embedInfo.getString("otp"))
-                    .setPlaybackInfo(embedInfo.getString("playbackInfo"))
-                    //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
-                    .build()
-            );
+            boolean offline = embedInfo.hasKey("offline") && embedInfo.getBoolean("offline");
+            final VdoInitParams initParams;
+
+            if (offline) {
+                initParams = VdoInitParams.createParamsForOffline(embedInfo.getString("mediaId"));
+            } else {
+                initParams = new VdoInitParams.Builder()
+                                .setOtp(embedInfo.getString("otp"))
+                                .setPlaybackInfo(embedInfo.getString("playbackInfo"))
+                                //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
+                                .build();
+            }
+            vdoPlayerView.load(initParams);
         }
     }
 
