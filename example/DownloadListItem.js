@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -24,7 +25,7 @@ export default class DownloadListItem extends Component {
     const actionsOpacity = actionsDisabled ? 0.4 : 1;
     const statusView = downloadStatus ?
       (
-        <View style={{padding: 10, width: '100%', backgroundColor: 'aliceblue', height: 90}}>
+        <View style={styles.statusViewContainer}>
           <Text style={{fontSize: 20}}>
             {mediaInfo.title}
           </Text>
@@ -33,7 +34,7 @@ export default class DownloadListItem extends Component {
           </Text>
         </View>) :
       (
-        <View style={{padding: 10, width: '100%', backgroundColor: 'aliceblue', height: 90}}>
+        <View style={styles.statusViewContainer}>
           <Text style={{fontSize: 20}}>
             Tap the download icon to save this sample to local storage.
           </Text>
@@ -41,9 +42,8 @@ export default class DownloadListItem extends Component {
       );
 
     return (
-      <View style={{backgroundColor: 'lightsteelblue', borderColor: 'lightsteelblue', borderRadius: 2, borderWidth: 4}}>
-        <View style={{flexDirection: 'row', flex: 1,
-            alignItems: 'center', borderRadius: 2, overflow: 'hidden'}}>
+      <View style={styles.container}>
+        <View style={styles.header}>
           <Text style={{flex: 1, paddingLeft: 8, fontSize: 22, fontWeight: 'bold'}}>
             {title}
           </Text>
@@ -55,8 +55,7 @@ export default class DownloadListItem extends Component {
             alignItems: 'center', borderRadius: 2, overflow: 'hidden'}}>
           {statusView}
         </View>
-        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end',
-            alignItems: 'center', borderRadius: 2, overflow: 'hidden'}}>
+        <View style={styles.actionsContainer}>
             <TouchableOpacity onPress={onPlay} activeOpacity={0.8} disabled={actionsDisabled}
                 style={{width: 80, height: 80, justifyContent: 'center', alignItems: 'center'}}>
               <Image opacity={actionsOpacity} source={require('./round_play_arrow_black_24.png')} />
@@ -74,3 +73,33 @@ export default class DownloadListItem extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'lightsteelblue',
+    borderColor: 'lightsteelblue',
+    borderRadius: 2,
+    borderWidth: 4
+  },
+  header: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 2,
+    overflow: 'hidden'
+  },
+  statusViewContainer: {
+    padding: 10,
+    width: '100%',
+    backgroundColor: 'aliceblue',
+    height: 90
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderRadius: 2,
+    overflow: 'hidden'
+  },
+});

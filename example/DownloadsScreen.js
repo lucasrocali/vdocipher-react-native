@@ -147,12 +147,12 @@ export default class DownloadsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{justifyContent: 'space-around', alignItems: 'center'}}>
+        <View style={styles.header}>
           <Text style={styles.welcome}>
             Download samples
           </Text>
         </View>
-        <View style={{flex:1, width: '100%', justifyContent: 'flex-end', paddingVertical: 20}}>
+        <View style={styles.listContainer}>
           <FlatList
             data={SAMPLE_EMBED_INFOS}
             renderItem={({ item, index }) =>
@@ -189,9 +189,19 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
   },
+  header: {
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
   welcome: {
     fontSize: 24,
     textAlign: 'center',
     margin: 10,
+  },
+  listContainer: {
+    flex:1,
+    width: '100%',
+    justifyContent: 'flex-end',
+    paddingVertical: 20
   },
 });
