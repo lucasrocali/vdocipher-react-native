@@ -24,7 +24,9 @@ development machine, and run the example app:
 
 `$ git clone https://github.com/VdoCipher/vdocipher-react-native.git .`
 
-`$ npm install && cd example && npm install && npm run android`
+`$ npm install && cd example && npm install`
+
+`$ npx react-native run-android`
 
 ## Getting started
 
