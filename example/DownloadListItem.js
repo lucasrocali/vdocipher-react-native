@@ -11,7 +11,7 @@ const statusDescription = (downloadStatus) => {
   if (downloadStatus.status === 'downloading') {
     return 'Downloading ' + downloadStatus.downloadPercent + '%';
   } else if (downloadStatus.status === 'failed') {
-    return 'Error ' + downloadStatus.reason + (reasonDescription ? ': ' + reasonDescription : '');
+    return 'Error ' + downloadStatus.reason + (downloadStatus.reasonDescription ? ': ' + downloadStatus.reasonDescription : '');
   } else {
     return downloadStatus.status;
   }
