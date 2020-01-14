@@ -21,8 +21,10 @@ export default class DownloadListItem extends Component {
   render() {
     const { title, downloadStatus, onDownload, onPlay, onInfo, onDelete } = this.props;
     const { mediaInfo, status, downloadPercent, reason, reasonDescription } = downloadStatus || {};
-    const actionsDisabled = downloadStatus === undefined;
-    const actionsOpacity = actionsDisabled ? 0.4 : 1;
+    const playEnabled = downloadStatus !== undefined && downloadStatus.status === 'completed';
+    const playOpacity = playEnabled ? 1 : 0.4;
+    const deleteEnabled = downloadStatus !== undefined;
+    const deleteOpacity = deleteEnabled ? 1 : 0.4;
     const statusView = downloadStatus ?
       (
         <View style={styles.statusViewContainer}>
@@ -56,17 +58,17 @@ export default class DownloadListItem extends Component {
           {statusView}
         </View>
         <View style={styles.actionsContainer}>
-            <TouchableOpacity onPress={onPlay} activeOpacity={0.8} disabled={actionsDisabled}
+            <TouchableOpacity onPress={onPlay} activeOpacity={0.8} disabled={!playEnabled}
                 style={{width: 80, height: 80, justifyContent: 'center', alignItems: 'center'}}>
-              <Image opacity={actionsOpacity} source={require('./round_play_arrow_black_24.png')} />
+              <Image opacity={playOpacity} source={require('./round_play_arrow_black_24.png')} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onInfo} activeOpacity={0.8} disabled={actionsDisabled}
+            <TouchableOpacity onPress={onInfo} activeOpacity={0.8} disabled={true}
                 style={{width: 80, height: 80, justifyContent: 'center', alignItems: 'center'}}>
-              <Image opacity={actionsOpacity} source={require('./baseline_info_black_18.png')} />
+              <Image opacity={0.4} source={require('./baseline_info_black_18.png')} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onDelete} activeOpacity={0.8} disabled={actionsDisabled}
+            <TouchableOpacity onPress={onDelete} activeOpacity={0.8} disabled={!deleteEnabled}
                 style={{width: 80, height: 80, justifyContent: 'center', alignItems: 'center'}}>
-              <Image opacity={actionsOpacity} source={require('./baseline_delete_black_18.png')} />
+              <Image opacity={deleteOpacity} source={require('./baseline_delete_black_18.png')} />
             </TouchableOpacity>
         </View>
       </View>
