@@ -53,11 +53,14 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
             final VdoInitParams initParams;
 
             if (offline) {
-                initParams = VdoInitParams.createParamsForOffline(embedInfo.getString("mediaId"));
+                String mediaId = embedInfo.hasKey("mediaId") ? embedInfo.getString("mediaId") : null;
+                initParams = VdoInitParams.createParamsForOffline(mediaId);
             } else {
+                String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
+                String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
                 initParams = new VdoInitParams.Builder()
-                                .setOtp(embedInfo.getString("otp"))
-                                .setPlaybackInfo(embedInfo.getString("playbackInfo"))
+                                .setOtp(otp)
+                                .setPlaybackInfo(playbackInfo)
                                 //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
                                 .build();
             }
