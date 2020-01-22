@@ -88,7 +88,7 @@ public class Utils {
     public static WritableMap makeMediaInfoMap(MediaInfo mediaInfo) {
         WritableMap mediaInfoMap = Arguments.createMap();
         mediaInfoMap.putString(EVENT_PROP_MEDIA_INFO_ID, mediaInfo.mediaId);
-        mediaInfoMap.putInt(EVENT_PROP_MEDIA_INFO_TYPE, mediaInfo.type);
+        mediaInfoMap.putString(EVENT_PROP_MEDIA_INFO_TYPE, mediaInfoTypeName(mediaInfo.type));
         mediaInfoMap.putString(EVENT_PROP_MEDIA_INFO_TITLE, mediaInfo.title);
         mediaInfoMap.putString(EVENT_PROP_MEDIA_INFO_DESCRIPTION, mediaInfo.description);
         mediaInfoMap.putInt(EVENT_PROP_MEDIA_INFO_DURATION, (int)mediaInfo.duration);
@@ -144,6 +144,19 @@ public class Utils {
             statusArray.pushMap(makeDownloadStatusMap(status));
         }
         return statusArray;
+    }
+
+    public static String mediaInfoTypeName(int mediaInfoType) {
+        switch (mediaInfoType) {
+            case MediaInfo.TYPE_STREAMING:
+                return "streaming";
+            case MediaInfo.TYPE_OFFLINE:
+                return "offline";
+            case MediaInfo.TYPE_INFO:
+                return "info";
+            default:
+                throw new IllegalArgumentException("Unknown MediaInfo type");
+        }
     }
 
     public static int downloadStatusIntFromName(String statusName) {
