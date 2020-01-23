@@ -69,7 +69,7 @@ export default class DownloadsScreen extends Component {
 
   _onChanged(mediaId, downloadStatus) {
     console.log('changed', mediaId, downloadStatus.downloadPercent + '%');
-    this._refreshDownloadList();
+    this._updateItem(mediaId, downloadStatus);
   }
 
   _onCompleted(mediaId, downloadStatus) {
