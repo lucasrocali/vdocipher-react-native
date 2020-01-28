@@ -122,6 +122,13 @@ const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
 * [onTracksChanged](#ontrackschanged)
 * [onMediaEnded](#onmediaended)
 * [onError](#onerror)
+* [onEnterFullscreen](#onenterfullscreen)
+* [onExitFullscreen](#onexitfullscreen)
+
+### VdoPlayerView methods
+
+* [enterFullscreen](#enterfullscreen)
+* [exitFullscreen](#exitfullscreen)
 
 ### Props
 
@@ -276,3 +283,26 @@ Property | Type | Description
 errorCode | number | an integer identifying the error
 errorMsg | string | short message description of the error
 httpStatusCode | number | http status code if relevant, -1 otherwise
+
+#### onEnterFullscreen
+Callback function invoked when the player enters fullscreen.
+
+#### onExitFullscreen
+Callback function invoked when the player exits fullscreen.
+
+### Methods
+
+Methods operate on a ref to the VdoPlayerView element. You can create a ref like this:
+```
+<VdoPlayerView ref={player => this._player = player}
+```
+
+#### enterFullscreen
+`enterFullscreen()`
+
+Enter fullscreen mode.
+
+#### exitFullscreen
+`exitFullscreen()`
+
+Exit fullscreen mode.
