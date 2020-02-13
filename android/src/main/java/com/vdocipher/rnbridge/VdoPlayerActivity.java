@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,8 +22,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
     private static final String TAG = "VdoPlayerActivity";
 
-    public static final String EXTRA_OTP = "otp";
-    public static final String EXTRA_PLAYBACKINFO = "plabackInfo";
+    private static final String EXTRA_VDOPARAMS = "vdoparams";
 
     private VdoPlayer player;
     private VdoPlayerSupportFragment playerFragment;
@@ -33,13 +31,11 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
     private int currentOrientation;
 
-    private volatile String mOtp;
-    private volatile String mPlaybackInfo;
+    private VdoPlayer.VdoInitParams vdoParams;
 
-    public static Intent getStartIntent(Context context, String otp, String playbackInfo) {
+    public static Intent getStartIntent(Context context, VdoPlayer.VdoInitParams vdoParams) {
         Intent intent = new Intent(context, VdoPlayerActivity.class);
-        intent.putExtra(EXTRA_OTP, otp);
-        intent.putExtra(EXTRA_PLAYBACKINFO, playbackInfo);
+        intent.putExtra(EXTRA_VDOPARAMS, vdoParams);
         return intent;
     }
 
@@ -57,15 +53,13 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
         // first check if otp and playbackInfo are already available from a previous instance
         if (savedInstanceState != null) {
-            mOtp = savedInstanceState.getString("otp");
-            mPlaybackInfo = savedInstanceState.getString("playbackInfo");
+            vdoParams = savedInstanceState.getParcelable(EXTRA_VDOPARAMS);
         }
 
         // expect in intent if not obtained yet
-        if (TextUtils.isEmpty(mOtp) || TextUtils.isEmpty(mPlaybackInfo)) {
+        if (vdoParams == null) {
             Intent intent = getIntent();
-            mOtp = intent.getStringExtra(EXTRA_OTP);
-            mPlaybackInfo = intent.getStringExtra(EXTRA_PLAYBACKINFO);
+            vdoParams = intent.getParcelableExtra(EXTRA_VDOPARAMS);
         }
 
         playerFragment = (VdoPlayerSupportFragment)getSupportFragmentManager().findFragmentById(R.id.online_vdo_player_fragment);
@@ -96,9 +90,8 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
     protected void onSaveInstanceState(Bundle outState) {
         Log.v(TAG, "onSaveInstanceState called");
         super.onSaveInstanceState(outState);
-        if (mOtp != null && mPlaybackInfo != null) {
-            outState.putString(EXTRA_OTP, mOtp);
-            outState.putString(EXTRA_PLAYBACKINFO, mPlaybackInfo);
+        if (vdoParams != null) {
+            outState.putParcelable(EXTRA_VDOPARAMS, vdoParams);
         }
     }
 
@@ -149,11 +142,6 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
         playerControlView.setControllerVisibilityListener(visibilityListener);
 
         // load a media to the player
-        VdoPlayer.VdoInitParams vdoParams = new VdoPlayer.VdoInitParams.Builder()
-                .setOtp(mOtp)
-                .setPlaybackInfo(mPlaybackInfo)
-                .setPreferredCaptionsLanguage("en")
-                .build();
         player.load(vdoParams);
         log("loaded init params to player");
     }

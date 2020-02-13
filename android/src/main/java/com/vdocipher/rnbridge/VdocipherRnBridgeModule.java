@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
+import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +43,12 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
     if (currentActivity == null) {
       android.util.Log.e("VdoRnBridgeModule", "Current Activity context could not be obtained.");
     } else {
-      Intent intent = VdoPlayerActivity.getStartIntent(currentActivity, otp, playbackInfo);
+      VdoInitParams vdoParams = new VdoInitParams.Builder()
+              .setOtp(otp)
+              .setPlaybackInfo(playbackInfo)
+              .setPreferredCaptionsLanguage("en")
+              .build();
+      Intent intent = VdoPlayerActivity.getStartIntent(currentActivity, vdoParams);
       currentActivity.startActivity(intent);
     }
   }
