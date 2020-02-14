@@ -36,18 +36,26 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void startVideoScreen(ReadableMap embedParams) {
     ReadableMap embedInfo = embedParams.getMap("embedInfo");
-    String otp = embedInfo.getString("otp");
-    String playbackInfo = embedInfo.getString("playbackInfo");
-    android.util.Log.i("params", "[" + otp + ", " + playbackInfo + "]");
     Activity currentActivity = getCurrentActivity();
     if (currentActivity == null) {
       android.util.Log.e("VdoRnBridgeModule", "Current Activity context could not be obtained.");
     } else {
-      VdoInitParams vdoParams = new VdoInitParams.Builder()
-              .setOtp(otp)
-              .setPlaybackInfo(playbackInfo)
-              .setPreferredCaptionsLanguage("en")
-              .build();
+      boolean offline = embedInfo.hasKey("offline") && embedInfo.getBoolean("offline");
+      final VdoInitParams vdoParams;
+
+      if (offline) {
+        String mediaId = embedInfo.hasKey("mediaId") ? embedInfo.getString("mediaId") : null;
+        vdoParams = VdoInitParams.createParamsForOffline(mediaId);
+      } else {
+        String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
+        String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
+        vdoParams = new VdoInitParams.Builder()
+                .setOtp(otp)
+                .setPlaybackInfo(playbackInfo)
+                .setPreferredCaptionsLanguage("en")
+                .build();
+      }
+
       Intent intent = VdoPlayerActivity.getStartIntent(currentActivity, vdoParams);
       currentActivity.startActivity(intent);
     }
