@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.5.3
+* Fix startVideoScreen implementation to support embedInfo for offline playback
+
 ### 1.5.2
 * Update VdoCipher android sdk dependency to 1.3.3
 * Bug fixes
