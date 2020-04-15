@@ -32,6 +32,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     // from props
     private boolean showNativeControls = true;
     private boolean playWhenReady = true;
+    private float pendingPlaybackSpeed = 0;
     private boolean fullscreen = false;
 
     private VdoInitParams pendingInitParams;
@@ -133,6 +134,13 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
         this.playWhenReady = playWhenReady;
         if (vdoPlayer != null) {
             vdoPlayer.setPlayWhenReady(playWhenReady);
+        }
+    }
+
+    public void setPlaybackSpeed(float playbackSpeed) {
+        this.pendingPlaybackSpeed = playbackSpeed;
+        if (vdoPlayer != null) {
+            vdoPlayer.setPlaybackSpeed(playbackSpeed);
         }
     }
 
@@ -261,6 +269,10 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     @Override
     public void onLoaded(VdoInitParams vdoInitParams) {
         vdoPlayer.setPlayWhenReady(playWhenReady);
+        if (pendingPlaybackSpeed > 0) {
+            vdoPlayer.setPlaybackSpeed(pendingPlaybackSpeed);
+            pendingPlaybackSpeed = 0;
+        }
         eventEmitter.loaded(vdoInitParams, vdoPlayer.getCurrentMedia());
     }
 

@@ -78,6 +78,11 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
         vdoPlayerView.setPlayWhenReady(playWhenReady);
     }
 
+    @ReactProp(name = "playbackSpeed", defaultFloat = 1f)
+    public void setPlaybackSpeed(ReactVdoPlayerView vdoPlayerView, float playbackSpeed) {
+        vdoPlayerView.setPlaybackSpeed(playbackSpeed);
+    }
+
     @ReactProp(name = "seek")
     public void setSeek(ReactVdoPlayerView vdoPlayerView, final int targetMs) {
         vdoPlayerView.seekTo(targetMs);

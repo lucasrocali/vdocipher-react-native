@@ -82,7 +82,7 @@ export default class VdoPlayerView extends Component {
 
   _onPlaybackSpeedChanged = (event) => {
     if (this.props.onPlaybackSpeedChanged) {
-      this.props.onPlaybackSpeedChanged(event.nativeEvent);
+      this.props.onPlaybackSpeedChanged(event.nativeEvent.playbackSpeed);
     }
   }
 
@@ -162,6 +162,7 @@ VdoPlayerView.propTypes = {
   embedInfo: PropTypes.object,
   showNativeControls: PropTypes.bool,
   playWhenReady: PropTypes.bool,
+  playbackSpeed: PropTypes.number,
   onInitializationSuccess: PropTypes.func,
   onInitializationFailure: PropTypes.func,
   onLoading: PropTypes.func,

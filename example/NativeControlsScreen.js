@@ -32,6 +32,7 @@ export default class NativeControlsScreen extends Component {
           onLoading={(args) => console.log('loading')}
           onLoaded={(args) => console.log('loaded')}
           onTracksChanged={(args) => console.log('tracks changed')}
+          onPlaybackSpeedChanged={(speed) => console.log('speed changed to', speed)}
           onMediaEnded={(args) => console.log('ended')}
           onEnterFullscreen={() => console.log('enter fullscreen')}
           onExitFullscreen={() => console.log('exit fullscreen')}

@@ -27,7 +27,7 @@ class VdoEventEmitter {
     private static final String EVENT_PLAYER_STATE_CHANGED = "onVdoPlayerStateChanged";
     private static final String EVENT_PROGRESS = "onVdoProgress";
     private static final String EVENT_BUFFER_UPDATE = "onVdoBufferUpdate";
-    private static final String EVENT_PLAYBACK_SPEED_CHANGED = "onVdoSpeedChanged";
+    private static final String EVENT_PLAYBACK_SPEED_CHANGED = "onVdoPlaybackSpeedChanged";
     private static final String EVENT_TRACKS_CHANGED = "onVdoTracksChanged";
     private static final String EVENT_MEDIA_ENDED = "onVdoMediaEnded";
     private static final String EVENT_ERROR = "onVdoError";
