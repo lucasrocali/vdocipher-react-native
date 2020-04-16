@@ -138,6 +138,10 @@ Property | Type | Description
 --- | --- | ---
 otp | string | a valid otp
 playbackInfo | string | a valid playbackInfo
+forceLowestBitrate | boolean | whether to force lowest bitrate; default false
+forceHighestSupportedBitrate | boolean | whether to force highest supported bitrate; default false
+maxVideoBitrateKbps | number | maximum allowed video bitrate in kbps
+bufferingGoalMs | number | buffering goal in milliseconds, NOT recommended to change this value for most use cases; cannot be set to a value less than 15000
 
 #### showNativeControls
 
