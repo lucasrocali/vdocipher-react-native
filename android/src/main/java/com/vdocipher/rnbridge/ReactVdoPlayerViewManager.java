@@ -58,9 +58,18 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
             } else {
                 String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
                 String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
+                boolean forceLowestBitrate = embedInfo.hasKey("forceLowestBitrate")
+                        && embedInfo.getBoolean("forceLowestBitrate");
+                boolean forceHighestSupportedBitrate = embedInfo.hasKey("forceHighestSupportedBitrate")
+                        && embedInfo.getBoolean("forceHighestSupportedBitrate");
+                int maxVideoBitrateKbps = embedInfo.hasKey("maxVideoBitrateKbps") ?
+                        embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
                 initParams = new VdoInitParams.Builder()
                                 .setOtp(otp)
                                 .setPlaybackInfo(playbackInfo)
+                                .setForceLowestBitrate(forceLowestBitrate)
+                                .setForceHighestSupportedBitrate(forceHighestSupportedBitrate)
+                                .setMaxVideoBitrateKbps(maxVideoBitrateKbps)
                                 //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
                                 .build();
             }

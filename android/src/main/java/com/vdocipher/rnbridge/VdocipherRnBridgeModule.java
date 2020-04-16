@@ -10,9 +10,6 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
 
   private final ReactApplicationContext reactContext;
@@ -49,9 +46,18 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
       } else {
         String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
         String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
+        boolean forceLowestBitrate = embedInfo.hasKey("forceLowestBitrate")
+                && embedInfo.getBoolean("forceLowestBitrate");
+        boolean forceHighestSupportedBitrate = embedInfo.hasKey("forceHighestSupportedBitrate")
+                && embedInfo.getBoolean("forceHighestSupportedBitrate");
+        int maxVideoBitrateKbps = embedInfo.hasKey("maxVideoBitrateKbps") ?
+                embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
         vdoParams = new VdoInitParams.Builder()
                 .setOtp(otp)
                 .setPlaybackInfo(playbackInfo)
+                .setForceLowestBitrate(forceLowestBitrate)
+                .setForceHighestSupportedBitrate(forceHighestSupportedBitrate)
+                .setMaxVideoBitrateKbps(maxVideoBitrateKbps)
                 .setPreferredCaptionsLanguage("en")
                 .build();
       }
