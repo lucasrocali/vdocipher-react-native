@@ -52,14 +52,19 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
                 && embedInfo.getBoolean("forceHighestSupportedBitrate");
         int maxVideoBitrateKbps = embedInfo.hasKey("maxVideoBitrateKbps") ?
                 embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
-        vdoParams = new VdoInitParams.Builder()
+        int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
+                embedInfo.getInt("bufferingGoalMs") : 0;
+        VdoInitParams.Builder builder = new VdoInitParams.Builder()
                 .setOtp(otp)
                 .setPlaybackInfo(playbackInfo)
                 .setForceLowestBitrate(forceLowestBitrate)
                 .setForceHighestSupportedBitrate(forceHighestSupportedBitrate)
                 .setMaxVideoBitrateKbps(maxVideoBitrateKbps)
-                .setPreferredCaptionsLanguage("en")
-                .build();
+                .setPreferredCaptionsLanguage("en");
+        if (bufferingGoalMs > 0) {
+          builder.setBufferingGoalMs(bufferingGoalMs);
+        }
+        vdoParams = builder.build();
       }
 
       Intent intent = VdoPlayerActivity.getStartIntent(currentActivity, vdoParams);

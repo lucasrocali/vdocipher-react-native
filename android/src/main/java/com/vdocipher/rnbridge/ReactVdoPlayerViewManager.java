@@ -64,14 +64,19 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                         && embedInfo.getBoolean("forceHighestSupportedBitrate");
                 int maxVideoBitrateKbps = embedInfo.hasKey("maxVideoBitrateKbps") ?
                         embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
-                initParams = new VdoInitParams.Builder()
+                int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
+                        embedInfo.getInt("bufferingGoalMs") : 0;
+                VdoInitParams.Builder builder = new VdoInitParams.Builder()
                                 .setOtp(otp)
                                 .setPlaybackInfo(playbackInfo)
                                 .setForceLowestBitrate(forceLowestBitrate)
                                 .setForceHighestSupportedBitrate(forceHighestSupportedBitrate)
-                                .setMaxVideoBitrateKbps(maxVideoBitrateKbps)
+                                .setMaxVideoBitrateKbps(maxVideoBitrateKbps);
                                 //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
-                                .build();
+                if (bufferingGoalMs > 0) {
+                    builder.setBufferingGoalMs(bufferingGoalMs);
+                }
+                initParams = builder.build();
             }
             vdoPlayerView.load(initParams);
         }
