@@ -107,6 +107,7 @@ const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
 * [embedInfo](#embedinfo)
 * [showNativeControls](#shownativecontrols)
 * [playWhenReady](#playwhenready)
+* [playbackSpeed](#playbackspeed)
 
 ### VdoPlayerView event props
 
@@ -154,6 +155,12 @@ Controls whether natively embedded player controls are shown.
 Controls whether playback will progress if the player is in ready state.
 * **true (default)** - play when ready
 * **false** - pause playback
+
+#### playbackSpeed
+
+Controls the playback speed; can be used once the player is loaded.
+* **1.0 (default)** - play at normal speed of the video
+* **Other values** - slow down or speed up playback
 
 ### Event props
 
