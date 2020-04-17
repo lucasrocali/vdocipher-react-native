@@ -1,4 +1,8 @@
 ## Changelog
+### 1.6.0
+* Add support to force lowest or highest supported bitrate, cap video bitrate, set buffering goal
+* Add playback speed api
+* Update VdoCipher android sdk dependency to 1.4.0
 
 ### 1.5.3
 * Fix startVideoScreen implementation to support embedInfo for offline playback
