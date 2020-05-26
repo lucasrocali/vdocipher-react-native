@@ -114,7 +114,7 @@ class VdoEventEmitter {
 
         WritableMap event = Arguments.createMap();
         event.putMap(EVENT_PROP_ERROR_DESCRIPTION, errDes);
-        receiveEvent(EVENT_INIT_FAILURE, event);
+        receiveEvent(EVENT_LOAD_ERROR, event);
     }
 
     void playerStateChanged(boolean playWhenReady, int playerState) {

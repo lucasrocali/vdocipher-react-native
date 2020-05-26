@@ -28,9 +28,11 @@ export default class NativeControlsScreen extends Component {
         <VdoPlayerView style={styles.player}
           embedInfo={embedInfo}
           onInitializationSuccess={() => console.log('init success')}
-          onInitializationFailure={() => console.log('init failure')}
+          onInitializationFailure={(error) => console.log('init failure', error)}
           onLoading={(args) => console.log('loading')}
           onLoaded={(args) => console.log('loaded')}
+          onLoadError={({errorDescription}) => console.log('load error', errorDescription)}
+          onError={({errorDescription}) => console.log('error', errorDescription)}
           onTracksChanged={(args) => console.log('tracks changed')}
           onPlaybackSpeedChanged={(speed) => console.log('speed changed to', speed)}
           onMediaEnded={(args) => console.log('ended')}
