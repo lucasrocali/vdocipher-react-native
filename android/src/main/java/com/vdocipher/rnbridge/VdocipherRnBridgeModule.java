@@ -6,9 +6,10 @@ import android.app.Activity;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
+
+import static com.vdocipher.rnbridge.Utils.getTechOverride;
 
 public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
 
@@ -54,6 +55,8 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
                 embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
         int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
                 embedInfo.getInt("bufferingGoalMs") : 0;
+        String[] overrides = getTechOverride(embedInfo);
+
         VdoInitParams.Builder builder = new VdoInitParams.Builder()
                 .setOtp(otp)
                 .setPlaybackInfo(playbackInfo)
@@ -63,6 +66,9 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
                 .setPreferredCaptionsLanguage("en");
         if (bufferingGoalMs > 0) {
           builder.setBufferingGoalMs(bufferingGoalMs);
+        }
+        if (overrides != null) {
+          builder.setTechOverride(overrides);
         }
         vdoParams = builder.build();
       }

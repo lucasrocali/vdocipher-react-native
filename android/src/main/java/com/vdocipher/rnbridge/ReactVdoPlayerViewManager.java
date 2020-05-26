@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import static com.vdocipher.rnbridge.Utils.getTechOverride;
+
 public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerView> {
     private static final String TAG = "ReactVdoPlayerViewMngr";
 
@@ -66,6 +68,8 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                         embedInfo.getInt("maxVideoBitrateKbps") : Integer.MAX_VALUE;
                 int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
                         embedInfo.getInt("bufferingGoalMs") : 0;
+                String[] overrides = getTechOverride(embedInfo);
+
                 VdoInitParams.Builder builder = new VdoInitParams.Builder()
                                 .setOtp(otp)
                                 .setPlaybackInfo(playbackInfo)
@@ -75,6 +79,9 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                                 //.setPreferredCaptionsLanguage(embedInfo.getString("lang??"))
                 if (bufferingGoalMs > 0) {
                     builder.setBufferingGoalMs(bufferingGoalMs);
+                }
+                if (overrides != null) {
+                    builder.setTechOverride(overrides);
                 }
                 initParams = builder.build();
             }

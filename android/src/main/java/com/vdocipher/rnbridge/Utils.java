@@ -1,6 +1,8 @@
 package com.vdocipher.rnbridge;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.vdocipher.aegis.media.ErrorDescription;
@@ -259,5 +261,20 @@ public class Utils {
                 stateName = "STATE_UNKNOWN";
         }
         return "playWhenReady " + (playWhenReady ? "true" : "false") + ", " + stateName;
+    }
+
+    public static String[] getTechOverride(ReadableMap embedInfo) {
+        ReadableArray overrideArray = embedInfo.hasKey("techOverride") ?
+                embedInfo.getArray("techOverride") : null;
+        if (overrideArray != null && overrideArray.size() > 0) {
+            final int size = overrideArray.size();
+            String[] overrides = new String[size];
+            for (int i = 0; i < size; i++) {
+                overrides[i] = overrideArray.getString(i);
+            }
+            return overrides;
+        } else {
+            return null;
+        }
     }
 }
