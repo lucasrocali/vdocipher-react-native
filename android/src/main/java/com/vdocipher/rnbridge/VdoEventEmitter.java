@@ -11,7 +11,6 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.MediaInfo;
 import com.vdocipher.aegis.media.Track;
-import com.vdocipher.aegis.player.VdoPlayer;
 import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
 import static com.vdocipher.rnbridge.Utils.*;
 
@@ -31,6 +30,7 @@ class VdoEventEmitter {
     private static final String EVENT_TRACKS_CHANGED = "onVdoTracksChanged";
     private static final String EVENT_MEDIA_ENDED = "onVdoMediaEnded";
     private static final String EVENT_ERROR = "onVdoError";
+    private static final String EVENT_PLAYBACK_PROPERTIES = "onVdoPlaybackProperties";
     private static final String EVENT_ENTER_FULLSCREEN = "onVdoEnterFullscreen";
     private static final String EVENT_EXIT_FULLSCREEN = "onVdoExitFullscreen";
 
@@ -42,6 +42,7 @@ class VdoEventEmitter {
             EVENT_PLAYBACK_SPEED_CHANGED, EVENT_TRACKS_CHANGED,
             EVENT_MEDIA_ENDED,
             EVENT_ERROR,
+            EVENT_PLAYBACK_PROPERTIES,
             EVENT_ENTER_FULLSCREEN, EVENT_EXIT_FULLSCREEN
     };
 
@@ -53,6 +54,7 @@ class VdoEventEmitter {
             EVENT_PLAYBACK_SPEED_CHANGED, EVENT_TRACKS_CHANGED,
             EVENT_MEDIA_ENDED,
             EVENT_ERROR,
+            EVENT_PLAYBACK_PROPERTIES,
             EVENT_ENTER_FULLSCREEN, EVENT_EXIT_FULLSCREEN})
     @interface VdoEvent {}
 
@@ -172,6 +174,13 @@ class VdoEventEmitter {
 
     void exitFullscreen() {
         receiveEvent(EVENT_EXIT_FULLSCREEN, null);
+    }
+
+    void playbackProperties(long totalPlayed, long totalCovered) {
+        WritableMap event = Arguments.createMap();
+        event.putInt("totalPlayed", (int)totalPlayed);
+        event.putInt("totalCovered", (int)totalCovered);
+        receiveEvent(EVENT_PLAYBACK_PROPERTIES, event);
     }
 
     private void receiveEvent(@VdoEvent String type, WritableMap event) {

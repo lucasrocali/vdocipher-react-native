@@ -12,6 +12,7 @@ export default class VdoPlayerView extends Component {
       fullscreen: true,
       orientation: 'portrait',
     }
+    this._propRef = 1;
   }
 
   seek = seekTargetMs => {
@@ -29,6 +30,12 @@ export default class VdoPlayerView extends Component {
   exitFullscreen = () => {
     if (this._root) {
       this._root.setNativeProps({fullscreen: false});
+    }
+  }
+
+  getPlaybackProperties = () => {
+    if (this._root) {
+      this._root.setNativeProps({playbackProperties: this._propRef++});
     }
   }
 
@@ -104,6 +111,12 @@ export default class VdoPlayerView extends Component {
     }
   }
 
+  _onPlaybackProperties = (event) => {
+    if (this.props.onPlaybackProperties) {
+      this.props.onPlaybackProperties(event.nativeEvent);
+    }
+  }
+
   _onEnterFullscreen = (event) => {
     if (this.props.onEnterFullscreen) {
       this.props.onEnterFullscreen();
@@ -131,6 +144,7 @@ export default class VdoPlayerView extends Component {
         onVdoTracksChanged={this._onTracksChanged}
         onVdoMediaEnded={((embedInfo) => (event) => this._onMediaEnded(embedInfo, event))(this.props.embedInfo)}
         onVdoError={((embedInfo) => (event) => this._onError(embedInfo, event))(this.props.embedInfo)}
+        onVdoPlaybackProperties={this._onPlaybackProperties}
         onVdoEnterFullscreen={this._onEnterFullscreen}
         onVdoExitFullscreen={this._onExitFullscreen}
         {...this.props}
@@ -153,6 +167,8 @@ VdoPlayerView.propTypes = {
   onVdoTracksChanged: PropTypes.func,
   onVdoMediaEnded: PropTypes.func,
   onVdoError: PropTypes.func,
+  playbackProperties: PropTypes.number,
+  onVdoPlaybackProperties: PropTypes.func,
   seek: PropTypes.number,
   fullscreen: PropTypes.bool,
   onVdoEnterFullscreen: PropTypes.func,
@@ -175,6 +191,7 @@ VdoPlayerView.propTypes = {
   onTracksChanged: PropTypes.func,
   onMediaEnded: PropTypes.func,
   onError: PropTypes.func,
+  onPlaybackProperties: PropTypes.func,
   onEnterFullscreen: PropTypes.func,
   onExitFullscreen: PropTypes.func,
 
