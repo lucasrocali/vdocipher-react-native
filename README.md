@@ -125,11 +125,13 @@ const embedInfo = {otp: 'some-otp', playbackInfo: 'some-playbackInfo'};
 * [onError](#onerror)
 * [onEnterFullscreen](#onenterfullscreen)
 * [onExitFullscreen](#onexitfullscreen)
+* [onPlaybackProperties](#onplaybackproperties)
 
 ### VdoPlayerView methods
 
 * [enterFullscreen](#enterfullscreen)
 * [exitFullscreen](#exitfullscreen)
+* [getPlaybackProperties](#getplaybackproperties)
 
 ### Props
 
@@ -301,6 +303,9 @@ Callback function invoked when the player enters fullscreen.
 #### onExitFullscreen
 Callback function invoked when the player exits fullscreen.
 
+#### onPlaybackProperties
+Callback function invoked when additional playback properties are requested using the `getPlaybackProperties` method.
+
 ### Methods
 
 Methods operate on a ref to the VdoPlayerView element. You can create a ref like this:
@@ -317,3 +322,8 @@ Enter fullscreen mode.
 `exitFullscreen()`
 
 Exit fullscreen mode.
+
+#### getPlaybackProperties
+`getPlaybackProperties()`
+
+Request additional playback properties. The callback `onPlaybackProperties` is invoked with the results.

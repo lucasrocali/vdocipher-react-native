@@ -1,4 +1,8 @@
 ## Changelog
+### 1.7.0
+* Add api to obtain additional playback properties
+* Update VdoCipher android sdk dependency to 1.5.1
+
 ### 1.6.0
 * Add support to force lowest or highest supported bitrate, cap video bitrate, set buffering goal
 * Add playback speed api
