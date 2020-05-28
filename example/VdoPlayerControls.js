@@ -30,6 +30,12 @@ export default class VdoPlayerControls extends Component {
       speed: 1,
       isFullscreen: false
     };
+    this.propInterval = null;
+  }
+
+  componentWillUnmount() {
+    console.log('VdoPlayerControls will unmount');
+    clearInterval(this.propInterval);
   }
 
   _onInitSuccess = () => {
@@ -56,6 +62,7 @@ export default class VdoPlayerControls extends Component {
       loaded: true,
       duration: metaData.mediaInfo.duration / 1000
     });
+    this.propInterval = setInterval(() => this._player.getPlaybackProperties(), 10000);
   }
 
   _onTracksChanged = () => {
@@ -74,6 +81,11 @@ export default class VdoPlayerControls extends Component {
     this.setState({
       position: progress.currentTime / 1000
     });
+  }
+
+  _onPlaybackProperties = properties => {
+    console.log('total played', properties.totalPlayed);
+    console.log('total covered', properties.totalCovered);
   }
 
   _onPlayButtonTouch = () => {
@@ -132,6 +144,7 @@ export default class VdoPlayerControls extends Component {
             onTracksChanged={this._onTracksChanged}
             onPlayerStateChanged={this._onPlayerStateChanged}
             onProgress={this._onProgress}
+            onPlaybackProperties={this._onPlaybackProperties}
             onEnterFullscreen={this._onEnterFullscreen}
             onExitFullscreen={this._onExitFullscreen}
           />
