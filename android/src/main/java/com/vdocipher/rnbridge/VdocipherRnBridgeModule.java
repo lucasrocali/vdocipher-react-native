@@ -43,7 +43,15 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
 
       if (offline) {
         String mediaId = embedInfo.hasKey("mediaId") ? embedInfo.getString("mediaId") : null;
-        vdoParams = VdoInitParams.createParamsForOffline(mediaId);
+        String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
+                embedInfo.getString("safetyNetApiKey") : null;
+
+        VdoInitParams.Builder builder = new VdoInitParams.Builder()
+                .setOfflinePlayback(mediaId);
+        if (safetyNetApiKey != null) {
+          builder.setSafetyNetApiKey(safetyNetApiKey);
+        }
+        vdoParams = builder.build();
       } else {
         String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
         String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
@@ -56,6 +64,8 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
         int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
                 embedInfo.getInt("bufferingGoalMs") : 0;
         String[] overrides = getTechOverride(embedInfo);
+        String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
+                embedInfo.getString("safetyNetApiKey") : null;
 
         VdoInitParams.Builder builder = new VdoInitParams.Builder()
                 .setOtp(otp)
@@ -69,6 +79,9 @@ public class VdocipherRnBridgeModule extends ReactContextBaseJavaModule {
         }
         if (overrides != null) {
           builder.setTechOverride(overrides);
+        }
+        if (safetyNetApiKey != null) {
+          builder.setSafetyNetApiKey(safetyNetApiKey);
         }
         vdoParams = builder.build();
       }

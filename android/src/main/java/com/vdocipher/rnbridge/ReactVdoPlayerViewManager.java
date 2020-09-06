@@ -56,7 +56,15 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
 
             if (offline) {
                 String mediaId = embedInfo.hasKey("mediaId") ? embedInfo.getString("mediaId") : null;
-                initParams = VdoInitParams.createParamsForOffline(mediaId);
+                String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
+                        embedInfo.getString("safetyNetApiKey") : null;
+
+                VdoInitParams.Builder builder = new VdoInitParams.Builder()
+                        .setOfflinePlayback(mediaId);
+                if (safetyNetApiKey != null) {
+                    builder.setSafetyNetApiKey(safetyNetApiKey);
+                }
+                initParams = builder.build();
             } else {
                 String otp = embedInfo.hasKey("otp") ? embedInfo.getString("otp") : null;
                 String playbackInfo = embedInfo.hasKey("playbackInfo") ? embedInfo.getString("playbackInfo") : null;
@@ -69,6 +77,8 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                 int bufferingGoalMs = embedInfo.hasKey("bufferingGoalMs") ?
                         embedInfo.getInt("bufferingGoalMs") : 0;
                 String[] overrides = getTechOverride(embedInfo);
+                String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
+                        embedInfo.getString("safetyNetApiKey") : null;
 
                 VdoInitParams.Builder builder = new VdoInitParams.Builder()
                                 .setOtp(otp)
@@ -82,6 +92,9 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                 }
                 if (overrides != null) {
                     builder.setTechOverride(overrides);
+                }
+                if (safetyNetApiKey != null) {
+                    builder.setSafetyNetApiKey(safetyNetApiKey);
                 }
                 initParams = builder.build();
             }
