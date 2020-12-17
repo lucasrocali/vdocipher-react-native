@@ -132,8 +132,10 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     public void getPlaybackProperties() {
         if (vdoPlayer != null) {
-            long totalPlayed = (long)vdoPlayer.getPlaybackProperty("totalPlayed");
-            long totalCovered = (long)vdoPlayer.getPlaybackProperty("totalCovered");
+            Object tp = vdoPlayer.getPlaybackProperty("totalPlayed");
+            long totalPlayed = (tp instanceof Long) ? (long)tp : 0L;
+            Object tc = vdoPlayer.getPlaybackProperty("totalCovered");
+            long totalCovered = (tc instanceof Long) ? (long)tc : 0L;
             eventEmitter.playbackProperties(totalPlayed, totalCovered);
         }
     }
