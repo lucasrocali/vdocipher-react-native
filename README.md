@@ -4,7 +4,7 @@
 
 ## Note:
 
-1. This is a _work in progress_. Please contact us at info@vdocipher.com  before
+1. This is a _work in progress_. Please contact us at support@vdocipher.com  before
    using it in your application
 2. IOS is not supported. Only Android support available. IOS support will be
    added in future.
@@ -14,19 +14,6 @@
    activity to home activity.
 
 React native library for integrating vdocipher android sdk into your react native app.
-
-## Try the demo app
-
-To run the example react-native app included in this repo, clone this repo to your
-development machine, and run the example app:
-
-`$ mkdir vdocipher-react-native && cd vdocipher-react-native`
-
-`$ git clone https://github.com/VdoCipher/vdocipher-react-native.git .`
-
-`$ npm install && cd example && npm install`
-
-`$ npx react-native run-android`
 
 ## Getting started
 
@@ -38,7 +25,7 @@ For installation you can choose either automatic or manual installation:
 instructions. No explicit linking is required as new rn versions use
 [autolinking](https://facebook.github.io/react-native/blog/2019/07/03/version-60) for native modules.
 
-### Mostly automatic installation
+### Automatic installation
 
 `$ react-native link vdocipher-rn-bridge`
 
@@ -76,6 +63,20 @@ maven {
     url "https://github.com/VdoCipher/maven-repo/raw/master/repo"
 }
 ```
+
+
+### Try the demo app
+
+To run the example react-native app included in this repo, clone this repo to your
+development machine, and run the example app:
+
+`$ mkdir vdocipher-react-native && cd vdocipher-react-native`
+
+`$ git clone https://github.com/VdoCipher/vdocipher-react-native.git .`
+
+`$ npm install && cd example && npm install`
+
+`$ npx react-native run-android`
 
 ## Usage
 
