@@ -1,6 +1,6 @@
 {
   "name": "vdocipher-rn-bridge",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "React native bridge library that delegates to vdocipher native android SDK",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +27,7 @@
     "VdoPlayerView.js",
     "downloads.js",
     "downloadMonitor.js",
-    "index.js"
+    "index.android.js",
+    "index.ios.js"
   ]
 }
