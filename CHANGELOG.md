@@ -1,4 +1,8 @@
 ## Changelog
+### 1.7.1
+* Update VdoCipher android sdk dependency to 1.7.1
+* Bug fixes
+
 ### 1.7.0
 * Add api to obtain additional playback properties
 * Update VdoCipher android sdk dependency to 1.5.1
