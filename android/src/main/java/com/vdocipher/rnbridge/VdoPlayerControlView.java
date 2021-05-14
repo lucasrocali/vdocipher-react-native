@@ -22,6 +22,8 @@ import com.vdocipher.aegis.player.VdoPlayer;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A view for controlling playback via a VdoPlayer.
@@ -68,9 +70,9 @@ public class VdoPlayerControlView extends FrameLayout {
     private final View controlPanel;
     private final View controllerBackground;
 
-    private int ffwdMs;
-    private int rewindMs;
-    private int showTimeoutMs;
+    private final int ffwdMs;
+    private final int rewindMs;
+    private final int showTimeoutMs;
 
     private boolean scrubbing;
     private boolean isAttachedToWindow;
@@ -79,8 +81,11 @@ public class VdoPlayerControlView extends FrameLayout {
     private VdoPlayer player;
     private UiListener uiListener;
     private VdoPlayer.VdoInitParams lastErrorParams;
+    private boolean shouldRetryWithLastParams;
     private FullscreenActionListener fullscreenActionListener;
     private ControllerVisibilityListener visibilityListener;
+
+    private static final List<Integer> ERROR_CODES_FOR_INVALID_OTP = Arrays.asList(2013, 2018);
 
     private static final float[] allowedSpeedList = new float[]{0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f};
     private static final CharSequence[] allowedSpeedStrList =
@@ -417,13 +422,19 @@ public class VdoPlayerControlView extends FrameLayout {
         controlPanel.setVisibility(GONE);
         errorView.setVisibility(VISIBLE);
         errorTextView.setVisibility(VISIBLE);
-        String errMsg = "An error occurred : " + errorDescription.errorCode + "\nTap to retry";
+        String errMsg;
+        if (!shouldRetryWithLastParams) {
+            errMsg = "Error: " + errorDescription.errorCode + ". Video OTP is expired or invalid. " +
+                    "Please go back, and start playback again.";
+        } else {
+            errMsg = "An error occurred : " + errorDescription.errorCode + "\nTap to retry";
+        }
         errorTextView.setText(errMsg);
         show();
     }
 
     private void retryAfterError() {
-        if (lastErrorParams != null) {
+        if (lastErrorParams != null && shouldRetryWithLastParams) {
             errorView.setVisibility(GONE);
             errorTextView.setVisibility(GONE);
             controlPanel.setVisibility(VISIBLE);
@@ -537,6 +548,7 @@ public class VdoPlayerControlView extends FrameLayout {
         @Override
         public void onLoadError(VdoPlayer.VdoInitParams vdoParams, ErrorDescription errorDescription) {
             lastErrorParams = vdoParams;
+            shouldRetryWithLastParams = !ERROR_CODES_FOR_INVALID_OTP.contains(errorDescription.errorCode);
             showError(errorDescription);
         }
 
@@ -548,6 +560,7 @@ public class VdoPlayerControlView extends FrameLayout {
         @Override
         public void onError(VdoPlayer.VdoInitParams vdoParams, ErrorDescription errorDescription) {
             lastErrorParams = vdoParams;
+            shouldRetryWithLastParams = !ERROR_CODES_FOR_INVALID_OTP.contains(errorDescription.errorCode);
             showError(errorDescription);
         }
 
