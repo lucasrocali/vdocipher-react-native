@@ -49,25 +49,41 @@ class HomeScreen extends Component<Props> {
         <Text style={styles.welcome}>
           Welcome to VdoCipher react-native integration!
         </Text>
-        <Button
-          disabled={!ready}
-          title={ready ? "Start video in native fullscreen" : "Loading..."}
-          onPress={() => startVideoScreen({embedInfo: {otp, playbackInfo}})}
-        />
-        <Button
-          disabled={!ready}
-          title={ready ? "Start video with embedded native controls" : "Loading..."}
-          onPress={() => this.props.navigation.navigate('NativeControls', {embedInfo: {otp, playbackInfo}})}
-        />
-        <Button
-          disabled={!ready}
-          title={ready ? "Start video with JS controls" : "Loading..."}
-          onPress={() => this.props.navigation.navigate('JSControls', {embedInfo: {otp, playbackInfo}})}
-        />
-        <Button
-          title='Downloads'
-          onPress={() => this.props.navigation.navigate('Downloads')}
-        />
+        <View style={styles.buttonContainer}>
+          <Button
+            disabled={!ready}
+            title={ready ? "Start video in native fullscreen" : "Loading..."}
+            onPress={
+              () => startVideoScreen({embedInfo: {otp, playbackInfo}})
+            }
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            disabled={!ready}
+            title={ready ? "Start video with embedded native controls" : "Loading..."}
+            onPress={
+              () => this.props.navigation.navigate('NativeControls', {embedInfo: {otp, playbackInfo}})
+            }
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            disabled={!ready}
+            title={ready ? "Start video with JS controls" : "Loading..."}
+            onPress={
+              () => this.props.navigation.navigate('JSControls', {embedInfo: {otp, playbackInfo}})
+            }
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title='Downloads'
+            onPress={
+              () => this.props.navigation.navigate('Downloads')
+            }
+          />
+        </View>
       </View>
     );
   }
@@ -99,13 +115,15 @@ export default createAppContainer(RootStack);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 20,
+  },
+  buttonContainer: {
+    margin: 20,
   },
 });
