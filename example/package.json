@@ -12,7 +12,6 @@
     "react": "16.9.0",
     "react-native": "^0.63.2",
     "react-native-gesture-handler": "^1.5.2",
-    "react-native-progress": "^4.0.2",
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "^2.0.0-alpha.17",
     "react-native-vector-icons": "^6.6.0",

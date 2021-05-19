@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { VdoPlayerView } from 'vdocipher-rn-bridge';
-import ProgressBar from 'react-native-progress/Bar';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -28,6 +27,7 @@ export default class VdoPlayerControls extends Component {
       duration: 0,
       position: 0,
       speed: 1,
+      seekbarPosition: 0,
       isFullscreen: false
     };
     this.propInterval = null;
@@ -78,8 +78,13 @@ export default class VdoPlayerControls extends Component {
   }
 
   _onProgress = progress => {
+    const newPosition = progress.currentTime / 1000;
+    const relativePosition = newPosition / this.state.duration;
+    const seekbarPosition = this._seekbarWidth * relativePosition;
+
     this.setState({
-      position: progress.currentTime / 1000
+      position: newPosition,
+      seekbarPosition
     });
   }
 
@@ -124,67 +129,77 @@ export default class VdoPlayerControls extends Component {
     }
   }
 
+  _renderSeekbar() {
+    return (
+      <TouchableWithoutFeedback
+        onPress={this._onProgressTouch}>
+        <View style={styles.seekbar.container}>
+          <View
+            style={styles.seekbar.track}
+            onLayout={event => this._seekbarWidth = event.nativeEvent.layout.width}>
+            <View
+              style={[styles.seekbar.fill, {width: this.state.seekbarPosition}]}
+            />
+          </View>
+          <View
+            style={[styles.seekbar.handle, {left: this.state.seekbarPosition}]}>
+            <View
+              style={[
+                styles.seekbar.circle,
+                {backgroundColor: '#FFF'},
+              ]}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
+
   render() {
-    var progressFraction = this.state.duration === 0 ? 0 : this.state.position / this.state.duration;
     var showPlayIcon = this.state.ended || !this.state.playWhenReady;
     var isFullscreen = this.state.isFullscreen;
 
     return (
       <View style={styles.player.container}>
-        <View>
-          <VdoPlayerView ref={player => this._player = player}
-            style={styles.player.video}
-            {...this.props}
-            playWhenReady={this.state.playWhenReady}
-            showNativeControls={false}
-            onInitializationSuccess={this._onInitSuccess}
-            onInitializationFailure={this._onInitFailure}
-            onLoading={this._onLoading}
-            onLoaded={this._onLoaded}
-            onTracksChanged={this._onTracksChanged}
-            onPlayerStateChanged={this._onPlayerStateChanged}
-            onProgress={this._onProgress}
-            onPlaybackProperties={this._onPlaybackProperties}
-            onEnterFullscreen={this._onEnterFullscreen}
-            onExitFullscreen={this._onExitFullscreen}
-          />
-          <View style={styles.controls.container}>
-            <TouchableWithoutFeedback onPress={this._onPlayButtonTouch}>
-              <Icon name = {showPlayIcon ? "play" : "pause"}
-                size={30}
-                color="#FFF"
-              />
-            </TouchableWithoutFeedback>
-            <Text
-              style={styles.controls.position}>
-              {digitalTime(Math.floor(this.state.position))}
-            </Text>
-            <TouchableWithoutFeedback
-              onPress={this._onProgressTouch}
-              onLayout={event => this._seekbarWidth = event.nativeEvent.layout.width}>
-              <View style={styles.controls.progressBarContainer}>
-                <ProgressBar style={styles.controls.progressBar}
-                  progress={progressFraction}
-                  color="#FFF"
-                  unfilledColor="rgba(255, 255, 255, 0.2)"
-                  borderColor="#FFF"
-                  width={null}
-                  height={20}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <Text
-              style={styles.controls.duration}>
-              {digitalTime(Math.floor(this.state.duration))}
-            </Text>
-            <TouchableWithoutFeedback onPress={this._toggleFullscreen}>
-              <MatIcon name = {isFullscreen ? "fullscreen-exit" : "fullscreen"}
-                style={styles.controls.fullscreen}
-                size={30}
-                color="#FFF"
-              />
-            </TouchableWithoutFeedback>
-          </View>
+        <VdoPlayerView ref={player => this._player = player}
+          style={styles.player.video}
+          {...this.props}
+          playWhenReady={this.state.playWhenReady}
+          showNativeControls={false}
+          onInitializationSuccess={this._onInitSuccess}
+          onInitializationFailure={this._onInitFailure}
+          onLoading={this._onLoading}
+          onLoaded={this._onLoaded}
+          onTracksChanged={this._onTracksChanged}
+          onPlayerStateChanged={this._onPlayerStateChanged}
+          onProgress={this._onProgress}
+          onPlaybackProperties={this._onPlaybackProperties}
+          onEnterFullscreen={this._onEnterFullscreen}
+          onExitFullscreen={this._onExitFullscreen}
+        />
+        <View style={styles.controls.container}>
+          <TouchableWithoutFeedback onPress={this._onPlayButtonTouch}>
+            <Icon name = {showPlayIcon ? "play" : "pause"}
+              size={30}
+              color="#FFF"
+            />
+          </TouchableWithoutFeedback>
+          <Text
+            style={styles.controls.position}>
+            {digitalTime(Math.floor(this.state.position))}
+          </Text>
+          {this._renderSeekbar()}
+          <Text
+            style={styles.controls.duration}>
+            {digitalTime(Math.floor(this.state.duration))}
+          </Text>
+          <TouchableWithoutFeedback onPress={this._toggleFullscreen}>
+            <MatIcon name = {isFullscreen ? "fullscreen-exit" : "fullscreen"}
+              style={styles.controls.fullscreen}
+              size={30}
+              color="#FFF"
+            />
+          </TouchableWithoutFeedback>
         </View>
       </View>
     );
@@ -215,6 +230,7 @@ const styles = {
       right: 0,
       position: 'absolute',
       flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
     },
@@ -243,5 +259,39 @@ const styles = {
     fullscreen: {
       marginLeft: 10,
     }
-  })
+  }),
+  seekbar: StyleSheet.create({
+    container: {
+      flex: 1,
+      height: 20,
+      marginLeft: 20,
+      marginRight: 20,
+    },
+    track: {
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+      height: 2,
+      position: 'relative',
+      top: 10,
+      width: '100%',
+    },
+    fill: {
+      backgroundColor: "#FFF",
+      height: 2,
+      width: '100%',
+    },
+    handle: {
+      position: 'absolute',
+      marginLeft: -6,
+      height: 20,
+      width: 20,
+    },
+    circle: {
+      borderRadius: 12,
+      position: 'relative',
+      top: 5,
+      left: 6,
+      height: 12,
+      width: 12,
+    },
+  }),
 };
