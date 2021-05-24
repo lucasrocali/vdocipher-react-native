@@ -44,6 +44,7 @@ class HomeScreen extends Component<Props> {
   render() {
     var ready = this.state.otp != null;
     const { otp, playbackInfo } = this.state;
+    const embedInfo = { otp, playbackInfo };
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -54,7 +55,7 @@ class HomeScreen extends Component<Props> {
             disabled={!ready}
             title={ready ? "Start video in native fullscreen" : "Loading..."}
             onPress={
-              () => startVideoScreen({embedInfo: {otp, playbackInfo}})
+              () => startVideoScreen({embedInfo})
             }
           />
         </View>
@@ -63,7 +64,7 @@ class HomeScreen extends Component<Props> {
             disabled={!ready}
             title={ready ? "Start video with embedded native controls" : "Loading..."}
             onPress={
-              () => this.props.navigation.navigate('NativeControls', {embedInfo: {otp, playbackInfo}})
+              () => this.props.navigation.navigate('NativeControls', {embedInfo})
             }
           />
         </View>
@@ -72,7 +73,7 @@ class HomeScreen extends Component<Props> {
             disabled={!ready}
             title={ready ? "Start video with JS controls" : "Loading..."}
             onPress={
-              () => this.props.navigation.navigate('JSControls', {embedInfo: {otp, playbackInfo}})
+              () => this.props.navigation.navigate('JSControls', {embedInfo})
             }
           />
         </View>
