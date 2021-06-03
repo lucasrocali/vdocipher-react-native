@@ -1,5 +1,9 @@
 ## Changelog
 ### 1.7.2
+* Update VdoCipher android sdk dependency to 1.8.1
+* Added adb debugging restrictions opt-in
+
+### 1.7.2
 * Update VdoCipher android sdk dependency to 1.7.3
 * Fixed error message for OTP related errors which cannot be retried with same embedInfo
 * Bug fixes
