@@ -42,5 +42,5 @@ repositories {
 
 dependencies {
     compileOnly 'com.facebook.react:react-native:+'
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.7.3'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.8.1'
 }
