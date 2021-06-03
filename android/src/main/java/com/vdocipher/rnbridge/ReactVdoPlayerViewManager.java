@@ -58,9 +58,12 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                 String mediaId = embedInfo.hasKey("mediaId") ? embedInfo.getString("mediaId") : null;
                 String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
                         embedInfo.getString("safetyNetApiKey") : null;
+                boolean allowAdbDebugging = !embedInfo.hasKey("allowAdbDebugging") ||
+                        embedInfo.getBoolean("allowAdbDebugging");
 
                 VdoInitParams.Builder builder = new VdoInitParams.Builder()
-                        .setOfflinePlayback(mediaId);
+                        .setOfflinePlayback(mediaId)
+                        .setAllowAdbDebugging(allowAdbDebugging);
                 if (safetyNetApiKey != null) {
                     builder.setSafetyNetApiKey(safetyNetApiKey);
                 }
@@ -79,10 +82,13 @@ public class ReactVdoPlayerViewManager extends ViewGroupManager<ReactVdoPlayerVi
                 String[] overrides = getTechOverride(embedInfo);
                 String safetyNetApiKey = embedInfo.hasKey("safetyNetApiKey") ?
                         embedInfo.getString("safetyNetApiKey") : null;
+                boolean allowAdbDebugging = !embedInfo.hasKey("allowAdbDebugging") ||
+                        embedInfo.getBoolean("allowAdbDebugging");
 
                 VdoInitParams.Builder builder = new VdoInitParams.Builder()
                                 .setOtp(otp)
                                 .setPlaybackInfo(playbackInfo)
+                                .setAllowAdbDebugging(allowAdbDebugging)
                                 .setForceLowestBitrate(forceLowestBitrate)
                                 .setForceHighestSupportedBitrate(forceHighestSupportedBitrate)
                                 .setMaxVideoBitrateKbps(maxVideoBitrateKbps);
