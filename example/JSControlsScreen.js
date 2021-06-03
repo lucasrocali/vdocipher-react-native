@@ -32,6 +32,8 @@ export default class JSControlsScreen extends Component {
           onInitializationFailure={() => console.log('init failure')}
           onLoading={(args) => console.log('loading')}
           onLoaded={(args) => console.log('loaded')}
+          onLoadError={({errorDescription}) => console.log('load error', errorDescription)}
+          onError={({errorDescription}) => console.log('error', errorDescription)}
           onTracksChanged={(args) => console.log('tracks changed')}
           onMediaEnded={(args) => console.log('ended')}
         />
