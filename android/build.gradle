@@ -1,3 +1,6 @@
+import org.json.JSONObject
+import java.nio.file.Files
+import java.nio.file.Paths
 
 buildscript {
     repositories {
@@ -37,6 +40,39 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+task verifyVersionNameMatchesWithPackageJson {
+    doLast {
+        final String versionFromGradleConfig = releaseVersionName
+
+        File f = project.file("../package.json")
+        String packageJsonText = new String(
+                Files.readAllBytes(Paths.get(f.toURI())),
+                "UTF-8")
+        JSONObject packageJsonData = new JSONObject(packageJsonText)
+
+        final String versionFromPackageJson = packageJsonData.get("version")
+
+        if (!versionFromGradleConfig.equals(versionFromPackageJson)) {
+            throw new IllegalStateException(
+                    "Version mismatch: version " + versionFromGradleConfig + " from build.gradle " +
+                            "does not match the version " + versionFromPackageJson + " in package.json." +
+                            "\nIn android/build.gradle, releaseVersionName must be " +
+                            "updated to reflect the version in package.json whenever the package.json " +
+                            "version is updated. Also, releaseVersionCode must be " +
+                            "incremented by 1 with every release." +
+                            "\nThis is to ensure the vdocipher " +
+                            "native android sdk has correct vdocipher react-native sdk version at runtime for " +
+                            "analytics and other purposes."
+            )
+        }
+    }
+}
+
+afterEvaluate {
+    assembleDebug.finalizedBy(verifyVersionNameMatchesWithPackageJson)
+    assembleRelease.finalizedBy(verifyVersionNameMatchesWithPackageJson)
 }
 
 repositories {
