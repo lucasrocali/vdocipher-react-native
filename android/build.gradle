@@ -12,14 +12,22 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+// TODO read from package.json
+// "releaseVersionName" must be the same as "version" in package.json
+// "releaseVersionCode" must increment by 1 with every release
+def releaseVersionName = "1.7.3"
+def releaseVersionCode = 1
+
 android {
     compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+
+        // Generate BuildConfig fields for library version info
+        buildConfigField "int", "VDO_VERSION_CODE", "${releaseVersionCode}"
+        buildConfigField "String", "VDO_VERSION_NAME", "\"${releaseVersionName}\""
     }
     lintOptions {
         abortOnError false
