@@ -1,4 +1,9 @@
 ## Changelog
+### 1.8.0
+* Update VdoCipher android sdk dependency to 1.10.0
+* Fixed release build errors
+* Bug fixes
+
 ### 1.7.2
 * Update VdoCipher android sdk dependency to 1.8.1
 * Added adb debugging restrictions opt-in
