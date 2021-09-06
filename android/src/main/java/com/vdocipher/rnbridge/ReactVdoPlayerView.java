@@ -10,13 +10,13 @@ import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
+import com.vdocipher.aegis.player.PlaybackState;
 import com.vdocipher.aegis.player.VdoPlayer;
-import com.vdocipher.aegis.player.VdoPlayer.PlayerHost;
-import com.vdocipher.aegis.player.VdoPlayer.InitializationListener;
+import com.vdocipher.aegis.player.PlayerHost;
+import com.vdocipher.aegis.player.PlayerHost.InitializationListener;
 import com.vdocipher.aegis.player.VdoPlayer.PlaybackEventListener;
-import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
+import com.vdocipher.aegis.player.VdoInitParams;
 import com.vdocipher.aegis.player.VdoPlayerView;
-import com.vdocipher.aegis.player.a.f;
 
 public class ReactVdoPlayerView extends FrameLayout implements InitializationListener,
         PlaybackEventListener, LifecycleEventListener, VdoPlayerControlView.FullscreenActionListener {
@@ -37,7 +37,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     private VdoInitParams pendingInitParams;
     private boolean stopped = false;
-    private Object playbackState = null;
+    private PlaybackState playbackState = null;
 
     public ReactVdoPlayerView(ThemedReactContext context) {
         super(context);
@@ -83,7 +83,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
 
     public void restorePlayback() {
         if (stopped && playbackState != null) {
-            playerView.restore((f)playbackState);
+            playerView.restore(playbackState);
             setKeepScreenOn(true);
         }
         stopped = false;
@@ -212,7 +212,7 @@ public class ReactVdoPlayerView extends FrameLayout implements InitializationLis
     // InitializationListener impl
 
     @Override
-    public void onInitializationSuccess(VdoPlayer.PlayerHost playerHost, VdoPlayer vdoPlayer, boolean restored) {
+    public void onInitializationSuccess(PlayerHost playerHost, VdoPlayer vdoPlayer, boolean restored) {
         Log.d(TAG, "init success");
         this.vdoPlayer = vdoPlayer;
         vdoPlayer.addPlaybackEventListener(this);

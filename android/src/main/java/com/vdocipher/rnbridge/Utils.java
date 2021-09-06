@@ -59,8 +59,6 @@ public class Utils {
                 return "video";
             case Track.TYPE_CAPTIONS:
                 return "captions";
-            case Track.TYPE_COMBINED:
-                return "combined";
             default:
                 return "unknown";
         }

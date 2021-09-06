@@ -11,7 +11,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.MediaInfo;
 import com.vdocipher.aegis.media.Track;
-import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams;
+import com.vdocipher.aegis.player.VdoInitParams;
 import static com.vdocipher.rnbridge.Utils.*;
 
 import java.lang.annotation.Retention;

@@ -16,9 +16,11 @@ import android.widget.Toast;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
+import com.vdocipher.aegis.player.VdoInitParams;
+import com.vdocipher.aegis.player.PlayerHost;
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment;
 
-public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.InitializationListener {
+public class VdoPlayerActivity extends AppCompatActivity implements PlayerHost.InitializationListener {
 
     private static final String TAG = "VdoPlayerActivity";
 
@@ -31,9 +33,9 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
 
     private int currentOrientation;
 
-    private VdoPlayer.VdoInitParams vdoParams;
+    private VdoInitParams vdoParams;
 
-    public static Intent getStartIntent(Context context, VdoPlayer.VdoInitParams vdoParams) {
+    public static Intent getStartIntent(Context context, VdoInitParams vdoParams) {
         Intent intent = new Intent(context, VdoPlayerActivity.class);
         intent.putExtra(EXTRA_VDOPARAMS, vdoParams);
         return intent;
@@ -130,7 +132,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
     }
 
     @Override
-    public void onInitializationSuccess(VdoPlayer.PlayerHost playerHost, VdoPlayer player, boolean wasRestored) {
+    public void onInitializationSuccess(PlayerHost playerHost, VdoPlayer player, boolean wasRestored) {
         Log.i(TAG, "onInitializationSuccess");
         log("onInitializationSuccess");
         this.player = player;
@@ -147,7 +149,7 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
     }
 
     @Override
-    public void onInitializationFailure(VdoPlayer.PlayerHost playerHost, ErrorDescription errorDescription) {
+    public void onInitializationFailure(PlayerHost playerHost, ErrorDescription errorDescription) {
         String msg = "onInitializationFailure: errorCode = " + errorDescription.errorCode + ": " + errorDescription.errorMsg;
         log(msg);
         Log.e(TAG, msg);
@@ -180,32 +182,32 @@ public class VdoPlayerActivity extends AppCompatActivity implements VdoPlayer.In
         }
 
         @Override
-        public void onLoading(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onLoading(VdoInitParams vdoInitParams) {
             log("onLoading");
         }
 
         @Override
-        public void onLoadError(VdoPlayer.VdoInitParams vdoInitParams, ErrorDescription errorDescription) {
+        public void onLoadError(VdoInitParams vdoInitParams, ErrorDescription errorDescription) {
             String err = "onLoadError code: " + errorDescription.errorCode;
             Log.e(TAG, err);
             log(err);
         }
 
         @Override
-        public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onLoaded(VdoInitParams vdoInitParams) {
             log("onLoaded");
             player.setPlayWhenReady(true);
         }
 
         @Override
-        public void onError(VdoPlayer.VdoInitParams vdoParams, ErrorDescription errorDescription) {
+        public void onError(VdoInitParams vdoParams, ErrorDescription errorDescription) {
             String err = "onError code " + errorDescription.errorCode + ": " + errorDescription.errorMsg;
             Log.e(TAG, err);
             log(err);
         }
 
         @Override
-        public void onMediaEnded(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onMediaEnded(VdoInitParams vdoInitParams) {
             log("onMediaEnded");
         }
     };

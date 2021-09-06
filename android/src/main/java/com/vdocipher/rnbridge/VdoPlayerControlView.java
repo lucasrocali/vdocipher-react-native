@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.vdocipher.aegis.media.ErrorDescription;
 import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
+import com.vdocipher.aegis.player.VdoInitParams;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -80,7 +81,7 @@ public class VdoPlayerControlView extends FrameLayout {
 
     private VdoPlayer player;
     private UiListener uiListener;
-    private VdoPlayer.VdoInitParams lastErrorParams;
+    private VdoInitParams lastErrorParams;
     private boolean shouldRetryWithLastParams;
     private FullscreenActionListener fullscreenActionListener;
     private ControllerVisibilityListener visibilityListener;
@@ -534,31 +535,31 @@ public class VdoPlayerControlView extends FrameLayout {
         }
 
         @Override
-        public void onLoading(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onLoading(VdoInitParams vdoInitParams) {
             updateLoader(true);
         }
 
         @Override
-        public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onLoaded(VdoInitParams vdoInitParams) {
             durationView.setText(String.valueOf(Utils.digitalClockTime((int)player.getDuration())));
             seekBar.setMax((int)player.getDuration());
             updateSpeedControlButton();
         }
 
         @Override
-        public void onLoadError(VdoPlayer.VdoInitParams vdoParams, ErrorDescription errorDescription) {
+        public void onLoadError(VdoInitParams vdoParams, ErrorDescription errorDescription) {
             lastErrorParams = vdoParams;
             shouldRetryWithLastParams = !ERROR_CODES_FOR_INVALID_OTP.contains(errorDescription.errorCode);
             showError(errorDescription);
         }
 
         @Override
-        public void onMediaEnded(VdoPlayer.VdoInitParams vdoInitParams) {
+        public void onMediaEnded(VdoInitParams vdoInitParams) {
             // todo
         }
 
         @Override
-        public void onError(VdoPlayer.VdoInitParams vdoParams, ErrorDescription errorDescription) {
+        public void onError(VdoInitParams vdoParams, ErrorDescription errorDescription) {
             lastErrorParams = vdoParams;
             shouldRetryWithLastParams = !ERROR_CODES_FOR_INVALID_OTP.contains(errorDescription.errorCode);
             showError(errorDescription);
