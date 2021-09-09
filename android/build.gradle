@@ -18,8 +18,8 @@ apply plugin: 'com.android.library'
 // TODO read from package.json
 // "releaseVersionName" must be the same as "version" in package.json
 // "releaseVersionCode" must increment by 1 with every release
-def releaseVersionName = "1.8.0"
-def releaseVersionCode = 2
+def releaseVersionName = "1.8.1"
+def releaseVersionCode = 3
 
 android {
     compileSdkVersion 30
